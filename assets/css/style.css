@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bgMain text-textMain;
+  }
+}
+
+.glass-panel {
+  @apply bg-surface/80 backdrop-blur-md border border-borderMain rounded-2xl shadow-xl;
+}
+
+.input-field {
+  @apply w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted;
+}
+
+.btn-primary {
+  @apply w-full bg-primary text-white py-3 rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 font-medium;
+}
+
+.sidebar-link {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-textSub hover:bg-surface hover:text-textMain transition-all;
+}
+.sidebar-link.active {
+  @apply bg-primary/10 text-primary font-medium;
+}
+
+.tab-btn {
+  @apply flex items-center gap-2 px-5 py-3 whitespace-nowrap relative transition-all text-textMuted hover:text-textMain hover:bg-surface rounded-t-lg;
+}
+.tab-btn.active {
+  @apply text-primary font-medium bg-surface border-b-2 border-primary;
+}

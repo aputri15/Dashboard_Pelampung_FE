@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Owner - BI Pelampung</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgMain: '#0F172A',
+            surface: '#1E293B',
+            borderMain: '#334155',
+            textMain: '#F1F5F9',
+            textSub: '#CBD5E1',
+            textMuted: '#64748B',
+            primary: '#3B82F6',
+            success: '#22C55E',
+            warning: '#F59E0B',
+            danger: '#EF4444',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-bgMain relative">
+
+  <!-- Header -->
+  <header class="bg-surface/90 backdrop-blur-md border-b border-borderMain sticky top-0 z-30 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+          <i data-lucide="bar-chart-3" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-semibold text-textMain">Dashboard BI Pelampung</h1>
+          <p class="text-xs text-textSub">Analitik bisnis & profitabilitas</p>
+        </div>
+      </div>
+      <button onclick="window.location.href='../index.html'" class="flex items-center gap-2 px-4 py-2 text-textSub hover:bg-danger/10 hover:text-danger rounded-lg transition-all border border-borderMain hover:border-danger/30">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="bg-surface/90 backdrop-blur-md border-b border-borderMain sticky top-[73px] z-20 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-6">
+      <div class="flex gap-2 overflow-x-auto pt-2" id="tabContainer">
+        <button class="tab-btn active" data-tab="tab1">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+          Profitabilitas Regional
+        </button>
+        <button class="tab-btn" data-tab="tab2">
+          <i data-lucide="package" class="w-4 h-4"></i>
+          Product-Region Fit
+        </button>
+        <button class="tab-btn" data-tab="tab3">
+          <i data-lucide="truck" class="w-4 h-4"></i>
+          LUCE
+        </button>
+        <button class="tab-btn" data-tab="tab4">
+          <i data-lucide="trending-down" class="w-4 h-4"></i>
+          Kebocoran Margin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-[1600px] mx-auto px-6 py-8">
+    
+    <!-- Tab 1 Content -->
+    <div id="tab1" class="tab-content block space-y-6">
+      
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-textMain">Profitabilitas Regional</h2>
+          <p class="text-textSub text-sm mt-1">Validasi strategi harga antar wilayah terhadap beban logistik (TLC)</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-textSub">Filter Bulan:</span>
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain">
+            <option>Semua Bulan</option>
+            <option>Januari</option>
+            <option>Februari</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <!-- KPI 1 -->
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-textSub text-sm font-medium">Total Revenue</h3>
+            <div class="p-2 bg-primary/10 rounded-lg"><i data-lucide="dollar-sign" class="w-4 h-4 text-primary"></i></div>
+          </div>
+          <div class="text-2xl font-bold text-textMain">Rp 450.5M</div>
+          <p class="text-success text-xs flex items-center gap-1 mt-2"><i data-lucide="trending-up" class="w-3 h-3"></i> +12.5% dari bulan lalu</p>
+        </div>
+        <!-- KPI 2 -->
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-textSub text-sm font-medium">Total TLC</h3>
+            <div class="p-2 bg-orange-500/10 rounded-lg"><i data-lucide="truck" class="w-4 h-4 text-orange-500"></i></div>
+          </div>
+          <div class="text-2xl font-bold text-textMain">Rp 210.2M</div>
+          <p class="text-danger text-xs flex items-center gap-1 mt-2"><i data-lucide="trending-up" class="w-3 h-3"></i> +5.2% dari bulan lalu</p>
+        </div>
+        <!-- KPI 3 -->
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-textSub text-sm font-medium">Gross Profit</h3>
+            <div class="p-2 bg-success/10 rounded-lg"><i data-lucide="pie-chart" class="w-4 h-4 text-success"></i></div>
+          </div>
+          <div class="text-2xl font-bold text-textMain">Rp 240.3M</div>
+          <p class="text-success text-xs flex items-center gap-1 mt-2"><i data-lucide="trending-up" class="w-3 h-3"></i> +15.3% dari bulan lalu</p>
+        </div>
+        <!-- KPI 4 -->
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-textSub text-sm font-medium">Avg GPM (%)</h3>
+            <div class="p-2 bg-purple-500/10 rounded-lg"><i data-lucide="percent" class="w-4 h-4 text-purple-500"></i></div>
+          </div>
+          <div class="text-2xl font-bold text-textMain">32.4%</div>
+          <p class="text-textMuted text-xs mt-2">Target: > 30%</p>
+        </div>
+        <!-- KPI 5 -->
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-textSub text-sm font-medium">Total Volume</h3>
+            <div class="p-2 bg-blue-400/10 rounded-lg"><i data-lucide="package" class="w-4 h-4 text-blue-400"></i></div>
+          </div>
+          <div class="text-2xl font-bold text-textMain">12,450</div>
+          <p class="text-textMuted text-xs mt-2">Unit terjual</p>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Revenue vs TLC vs Gross Profit per Wilayah</h3>
+          <div id="chartProfitRegion" style="width: 100%; height: 350px;"></div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Tren GPM (%) per Bulan</h3>
+          <div id="chartGPMTrend" style="width: 100%; height: 350px;"></div>
+        </div>
+      </div>
+
+      <!-- Detail Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-primary">
+          <div>
+            <p class="text-textSub text-sm mb-1">GPM Jawa</p>
+            <h4 class="text-2xl font-bold text-textMain">35.2%</h4>
+          </div>
+          <div class="px-3 py-1 bg-success/20 text-success text-xs rounded-full font-medium border border-success/30">Sehat</div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-success">
+          <div>
+            <p class="text-textSub text-sm mb-1">GPM Kalimantan</p>
+            <h4 class="text-2xl font-bold text-textMain">28.5%</h4>
+          </div>
+          <div class="px-3 py-1 bg-warning/20 text-warning text-xs rounded-full font-medium border border-warning/30">Waspada</div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-warning">
+          <div>
+            <p class="text-textSub text-sm mb-1">GPM Sumatera</p>
+            <h4 class="text-2xl font-bold text-textMain">12.4%</h4>
+          </div>
+          <div class="px-3 py-1 bg-danger/20 text-danger text-xs rounded-full font-medium border border-danger/30">Bahaya</div>
+        </div>
+      </div>
+
+      <!-- Margin Gap Visuals -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        
+        <!-- Gap: Jawa vs Kalimantan -->
+        <div class="bg-surface border border-warning/30 rounded-2xl p-6 shadow-sm flex flex-col h-full">
+          <div class="flex items-center gap-2 mb-6">
+            <i data-lucide="alert-triangle" class="w-5 h-5 text-warning"></i>
+            <h3 class="text-lg font-medium text-textMain">Margin Gap: Jawa vs Kalimantan</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Jawa Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-primary flex items-center justify-end pr-3 transition-all duration-1000" style="width: 70%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Jawa: 35.2%</span>
+              </div>
+            </div>
+            
+            <!-- Kalimantan Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-warning flex items-center justify-end pr-3 transition-all duration-1000" style="width: 57%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Kalimantan: 28.5%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-auto pt-6">
+            <div class="bg-warning/10 border border-warning/20 rounded-xl p-4">
+              <p class="text-sm text-warning font-medium leading-relaxed">Gap: 6.7%<br/>Margin Kalimantan ~19% lebih rendah dari Jawa</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gap: Jawa vs Sumatera -->
+        <div class="bg-surface border border-purple-500/30 rounded-2xl p-6 shadow-sm flex flex-col h-full">
+          <div class="flex items-center gap-2 mb-6">
+            <i data-lucide="alert-circle" class="w-5 h-5 text-purple-500"></i>
+            <h3 class="text-lg font-medium text-textMain">Margin Gap: Jawa vs Sumatera</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Jawa Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-primary flex items-center justify-end pr-3 transition-all duration-1000" style="width: 70%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Jawa: 35.2%</span>
+              </div>
+            </div>
+            
+            <!-- Sumatera Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-purple-500 flex items-center justify-start pl-3 transition-all duration-1000" style="width: 25%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Sumatera: 12.4%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-auto pt-6">
+            <div class="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4">
+              <p class="text-sm text-purple-400 font-medium leading-relaxed">Gap: 22.8%<br/>Margin Sumatera ~64% lebih rendah dari Jawa</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gap: Kalimantan vs Sumatera -->
+        <div class="bg-surface border border-danger/30 rounded-2xl p-6 shadow-sm flex flex-col h-full">
+          <div class="flex items-center gap-2 mb-6">
+            <i data-lucide="alert-octagon" class="w-5 h-5 text-danger"></i>
+            <h3 class="text-lg font-medium text-textMain">Margin Gap: Kalimantan vs Sumatera</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <!-- Kalimantan Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-warning flex items-center justify-end pr-3 transition-all duration-1000" style="width: 57%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Kalimantan: 28.5%</span>
+              </div>
+            </div>
+            
+            <!-- Sumatera Bar -->
+            <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
+              <div class="absolute top-0 left-0 h-full bg-danger flex items-center justify-start pl-3 transition-all duration-1000" style="width: 25%;">
+                <span class="text-xs font-bold text-white whitespace-nowrap">Sumatera: 12.4%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-auto pt-6">
+            <div class="bg-danger/10 border border-danger/20 rounded-xl p-4">
+              <p class="text-sm text-danger font-medium leading-relaxed">Gap: 16.1%<br/>Margin Sumatera ~56% lebih rendah dari Kalimantan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Other tabs placeholders -->
+    <!-- Tab 2 Content -->
+    <div id="tab2" class="tab-content hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-textMain">Product-Region Fit</h2>
+          <p class="text-textSub text-sm mt-1">Identifikasi produk paling menguntungkan per wilayah berdasarkan volume dan margin</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain">
+            <option>Semua Wilayah</option>
+            <option>Jawa</option>
+            <option>Kalimantan</option>
+            <option>Sumatera</option>
+          </select>
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain">
+            <option>Semua Model</option>
+            <option>Balsa</option>
+            <option>Fosfor</option>
+          </select>
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain">
+            <option>Semua Bulan</option>
+            <option>Januari</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Volume vs GPM% per Kategori</h3>
+          <div id="chartProductFit" style="width: 100%; height: 350px;"></div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Top 5 Produk (GPM Tertinggi)</h3>
+          <div id="chartTopGPM" style="width: 100%; height: 350px;"></div>
+        </div>
+      </div>
+      
+      <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm">
+            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+              <tr>
+                <th class="py-4">Tipe ID</th>
+                <th>Kategori</th>
+                <th class="text-right">Volume (Unit)</th>
+                <th class="text-right">GPM (%)</th>
+                <th class="text-right">Total Profit</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-textMain divide-y divide-borderMain">
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium text-primary">BLS-001</td>
+                <td>Balsa</td>
+                <td class="text-right">4,500</td>
+                <td class="text-right font-bold text-success">35.2%</td>
+                <td class="text-right">Rp 45.2M</td>
+                <td class="text-center"><span class="badge bg-success/20 text-success border-transparent">Sehat</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3 Content -->
+    <div id="tab3" class="tab-content hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-textMain">LUCE (Logistics Unit Cost Efficiency)</h2>
+          <p class="text-textSub text-sm mt-1">Mengukur efisiensi biaya logistik per unit per kombinasi kota dan model produk</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain">
+            <option>Semua Model</option>
+            <option>Balsa</option>
+            <option>Fosfor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Heatmap LCR (%) per Kota</h3>
+          <div id="chartLCRHeatmap" style="width: 100%; height: 350px;"></div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">MOQ (Minimum Order Quantity) per Kota</h3>
+          <div id="chartMOQ" style="width: 100%; height: 350px;"></div>
+        </div>
+      </div>
+
+      <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm">
+            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+              <tr>
+                <th class="py-4">Kota</th>
+                <th>Model</th>
+                <th class="text-right">Harga Jual</th>
+                <th class="text-right">Biaya Log/Unit</th>
+                <th class="text-right">LCR (%)</th>
+                <th class="text-right">Min Order</th>
+                <th>Penanggung</th>
+              </tr>
+            </thead>
+            <tbody class="text-textMain divide-y divide-borderMain">
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium">Surabaya</td>
+                <td>Balsa</td>
+                <td class="text-right">Rp 15.000</td>
+                <td class="text-right">Rp 1.500</td>
+                <td class="text-right font-bold text-success">10%</td>
+                <td class="text-right text-primary font-medium">100</td>
+                <td>Owner</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4 Content -->
+    <div id="tab4" class="tab-content hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold text-textMain">Kebocoran Margin (Sukabumi)</h2>
+          <p class="text-textSub text-sm mt-1">Memantau efisiensi pengiriman Sukabumi (Fixed Cost Owner Rp800.000/trip)</p>
+        </div>
+        <div class="flex items-center gap-4 bg-surface p-2 px-4 rounded-xl border border-borderMain">
+          <span class="text-sm text-textSub whitespace-nowrap">Karung per trip:</span>
+          <input type="range" min="1" max="20" value="10" class="range range-primary range-sm w-32" />
+          <span class="text-textMain font-medium font-mono">10</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm">
+          <h3 class="text-textSub text-sm font-medium mb-2">Total Kebocoran 2025</h3>
+          <div class="text-2xl font-bold text-danger">Rp 12.5M</div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm">
+          <h3 class="text-textSub text-sm font-medium mb-2">Rata-rata Utilization</h3>
+          <div class="text-2xl font-bold text-warning">65%</div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm">
+          <h3 class="text-textSub text-sm font-medium mb-2">Bulan Kebocoran Terbesar</h3>
+          <div class="text-2xl font-bold text-textMain">April</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Utilization Rate (%) per Bulan</h3>
+          <div id="chartUtilization" style="width: 100%; height: 350px;"></div>
+        </div>
+        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
+          <h3 class="text-lg font-medium text-textMain mb-4">Biaya Logistik Aktual vs Target per Unit</h3>
+          <div id="chartBullet" style="width: 100%; height: 350px;"></div>
+        </div>
+      </div>
+
+      <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm">
+            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+              <tr>
+                <th class="py-4">Bulan</th>
+                <th class="text-right">Qty Aktual</th>
+                <th class="text-right">Kapasitas Ideal</th>
+                <th class="text-right">Utilization</th>
+                <th class="text-right">Cost Aktual</th>
+                <th class="text-right">Cost Target</th>
+                <th class="text-right">Total Kebocoran</th>
+              </tr>
+            </thead>
+            <tbody class="text-textMain divide-y divide-borderMain">
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium">Januari</td>
+                <td class="text-right">500</td>
+                <td class="text-right">1000</td>
+                <td class="text-right font-bold text-danger">50%</td>
+                <td class="text-right">Rp 1.600</td>
+                <td class="text-right">Rp 800</td>
+                <td class="text-right text-danger font-medium">Rp 400.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../assets/js/charts.js"></script>
+  <script>
+    lucide.createIcons();
+    
+    // Tab switching logic
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        // Find the actual button element in case icon was clicked
+        const targetBtn = e.currentTarget;
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary'));
+        targetBtn.classList.add('active', 'text-primary', 'border-b-2', 'border-primary');
+        
+        document.querySelectorAll('.tab-content').forEach(c => {
+          c.classList.remove('block');
+          c.classList.add('hidden');
+        });
+        
+        const targetTab = document.getElementById(targetBtn.dataset.tab);
+        if (targetTab) {
+          targetTab.classList.remove('hidden');
+          targetTab.classList.add('block');
+        }
+        
+        // Resize charts after DOM updates layout
+        setTimeout(() => {
+          if (window.appCharts) {
+            Object.values(window.appCharts).forEach(chart => {
+              if (chart && typeof chart.resize === 'function') {
+                chart.resize();
+              }
+            });
+          }
+        }, 50);
+      });
+    });
+  </script>
+</body>
+</html>

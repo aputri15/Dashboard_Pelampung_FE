@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Kelola Data | BI Pelampung</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgMain: '#0F172A',
+            surface: '#1E293B',
+            borderMain: '#334155',
+            textMain: '#F1F5F9',
+            textSub: '#CBD5E1',
+            textMuted: '#64748B',
+            primary: '#3B82F6',
+            danger: '#EF4444',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex bg-bgMain">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
+    <div class="p-6 flex items-center gap-3 border-b border-borderMain">
+      <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-lg font-bold text-textMain">Admin Panel</h1>
+        <p class="text-xs text-textSub">BI Pelampung</p>
+      </div>
+    </div>
+    
+    <nav class="flex-1 p-4 space-y-2">
+      <a href="upload.html" class="sidebar-link">
+        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+        <span>Upload Data</span>
+      </a>
+      <a href="kelola.html" class="sidebar-link active">
+        <i data-lucide="database" class="w-5 h-5"></i>
+        <span>Kelola Data</span>
+      </a>
+      <a href="log.html" class="sidebar-link">
+        <i data-lucide="history" class="w-5 h-5"></i>
+        <span>Log Upload</span>
+      </a>
+      <a href="akun.html" class="sidebar-link">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        <span>Manajemen Akun</span>
+      </a>
+    </nav>
+    
+    <div class="p-4 border-t border-borderMain">
+      <button onclick="window.location.href='../index.html'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-textSub hover:bg-danger/10 hover:text-danger rounded-lg transition-all border border-transparent hover:border-danger/30">
+        <i data-lucide="log-out" class="w-5 h-5"></i>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-64 flex-1 p-8">
+    <div class="max-w-[1400px] mx-auto">
+      
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-textMain">Kelola Data Transaksi</h2>
+          <p class="text-textSub mt-1">Lihat, edit, dan hapus data transaksi di database.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-textMuted absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" placeholder="Cari data PO..." class="pl-9 pr-4 py-2 bg-surface border border-borderMain rounded-lg text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none">
+          </div>
+          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain rounded-lg h-[38px]">
+            <option>Semua Bulan</option>
+            <option>Januari</option>
+            <option>Februari</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="table w-full text-sm">
+            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+              <tr>
+                <th class="py-4">No. PO</th>
+                <th>Tanggal</th>
+                <th>Pelanggan</th>
+                <th>Produk</th>
+                <th>Wilayah</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Harga Satuan</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="text-textMain divide-y divide-borderMain">
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium">PO-2025-001</td>
+                <td class="text-textSub">01 Jan 2025</td>
+                <td>Toko Rezeki (Jakarta)</td>
+                <td>Pelampung Balsa</td>
+                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Jawa</span></td>
+                <td class="text-right font-medium">100</td>
+                <td class="text-right">Rp 15.000</td>
+                <td>
+                  <div class="flex items-center justify-center gap-2">
+                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium">PO-2025-002</td>
+                <td class="text-textSub">05 Jan 2025</td>
+                <td>Pancing Jaya (Medan)</td>
+                <td>Pelampung Fosfor</td>
+                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Sumatera</span></td>
+                <td class="text-right font-medium">50</td>
+                <td class="text-right">Rp 22.000</td>
+                <td>
+                  <div class="flex items-center justify-center gap-2">
+                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <!-- More static rows -->
+              <tr class="hover:bg-bgMain/30 transition-colors">
+                <td class="font-medium">PO-2025-003</td>
+                <td class="text-textSub">10 Jan 2025</td>
+                <td>Nelayan Sejahtera (Balikpapan)</td>
+                <td>Pelampung Balsa</td>
+                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Kalimantan</span></td>
+                <td class="text-right font-medium">200</td>
+                <td class="text-right">Rp 18.000</td>
+                <td>
+                  <div class="flex items-center justify-center gap-2">
+                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="p-4 border-t border-borderMain flex items-center justify-between text-sm text-textSub bg-bgMain/20">
+          <div>Menampilkan 1-3 dari 345 data</div>
+          <div class="join">
+            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">«</button>
+            <button class="join-item btn btn-sm bg-primary text-white hover:bg-blue-600 border-transparent">1</button>
+            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">2</button>
+            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">3</button>
+            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">»</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

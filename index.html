@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - BI Pelampung</title>
+  <!-- Tailwind via script for dev without node, but standard build uses style.css -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Fallback Tailwind CSS script so it renders if user just opens the file -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgMain: '#0F172A',
+            surface: '#1E293B',
+            borderMain: '#334155',
+            textMain: '#F1F5F9',
+            textSub: '#CBD5E1',
+            textMuted: '#64748B',
+            primary: '#3B82F6',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-bgMain relative overflow-hidden">
+  
+  <!-- Ambient background glow for advanced look -->
+  <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <div class="w-full max-w-md p-8 relative z-10">
+    <div class="bg-surface/80 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-borderMain">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-indigo-600 rounded-2xl mb-4 shadow-lg shadow-primary/30">
+          <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-textMain mb-2">BI Pelampung</h1>
+        <p class="text-textSub text-sm">Masuk untuk mengakses dashboard analitik</p>
+      </div>
+
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label class="block text-sm mb-2 text-textSub font-medium">Username</label>
+          <div class="relative">
+            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-textMuted"></i>
+            <input type="text" id="username" class="w-full pl-11 pr-4 py-3 bg-[#0F172A]/50 border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted" placeholder="Masukkan username" required>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-2 text-textSub font-medium">Password</label>
+          <div class="relative">
+            <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-textMuted"></i>
+            <input type="password" id="password" class="w-full pl-11 pr-4 py-3 bg-[#0F172A]/50 border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted" placeholder="Masukkan password" required>
+          </div>
+        </div>
+
+        <div id="errorMsg" class="hidden bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+          <i data-lucide="alert-circle" class="w-4 h-4"></i>
+          <span>Username atau password salah</span>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-primary to-indigo-600 text-white py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 font-medium">
+          <i data-lucide="log-in" class="w-5 h-5"></i>
+          Login
+        </button>
+      </form>
+
+      <div class="mt-6 p-4 bg-[#0F172A]/50 rounded-xl border border-borderMain/50">
+        <p class="text-xs text-textMuted mb-2 font-medium">Demo credentials:</p>
+        <div class="text-xs text-textSub space-y-1">
+          <div class="flex justify-between"><span class="font-medium text-textMain">Admin:</span> <span>admin / admin123</span></div>
+          <div class="flex justify-between"><span class="font-medium text-textMain">Owner:</span> <span>owner / owner123</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+
+      errorMsg.classList.add('hidden');
+
+      if (user === 'admin' && pass === 'admin123') {
+        window.location.href = './admin/upload.html';
+      } else if (user === 'owner' && pass === 'owner123') {
+        window.location.href = './owner/dashboard.html';
+      } else {
+        errorMsg.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
