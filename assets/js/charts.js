@@ -108,67 +108,65 @@ async function loadProfitabilitas() {
   }
 
   // Detail Cards GPM per wilayah
-  const gpmW = data.gpm_per_wilayah || {};
-  function updateGPMCard(id, badgeId, val) {
+  const dataW = {};
+  if (data.regional_data) {
+    data.regional_data.forEach(d => {
+      dataW[d.wilayah] = {
+        gpm: d.gpm_percent,
+        vol: d.volume,
+        gp: d.gross_profit
+      };
+    });
+  }
+
+  function updateGPMCard(id, badgeId, volId, gpId, wData) {
+    const val = wData ? wData.gpm : 0;
+    const vol = wData ? wData.vol : 0;
+    const gp = wData ? wData.gp : 0;
     setText(id, `${(val || 0).toFixed(1)}%`);
+    setText(volId, vol.toLocaleString('id-ID'));
+    setText(gpId, `Rp ${(gp / 1e6).toFixed(1)}Jt`);
     const badge = document.getElementById(badgeId);
     if (!badge) return;
-    if (val > 30) { badge.textContent = 'Sehat'; badge.className = 'px-3 py-1 bg-success/20 text-success text-xs rounded-full font-medium border border-success/30'; }
-    else if (val >= 15) { badge.textContent = 'Waspada'; badge.className = 'px-3 py-1 bg-warning/20 text-warning text-xs rounded-full font-medium border border-warning/30'; }
-    else { badge.textContent = 'Bahaya'; badge.className = 'px-3 py-1 bg-danger/20 text-danger text-xs rounded-full font-medium border border-danger/30'; }
+    if (val > 30) { badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat'; badge.className = 'px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5'; }
+    else if (val >= 15) { badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-warning"></span>Waspada'; badge.className = 'px-3 py-1 bg-warning/10 text-warning text-xs rounded-full font-medium border border-warning/20 flex items-center gap-1.5'; }
+    else { badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>Bahaya'; badge.className = 'px-3 py-1 bg-danger/10 text-danger text-xs rounded-full font-medium border border-danger/20 flex items-center gap-1.5'; }
   }
-  updateGPMCard('gpmJawa', 'badgeJawa', gpmW['Jawa'] || 0);
-  updateGPMCard('gpmKalimantan', 'badgeKalimantan', gpmW['Kalimantan'] || 0);
-  updateGPMCard('gpmSumatera', 'badgeSumatera', gpmW['Sumatera'] || 0);
+  updateGPMCard('gpmJawa', 'badgeJawa', 'volJawa', 'gpJawa', dataW['Jawa']);
+  updateGPMCard('gpmKalimantan', 'badgeKalimantan', 'volKalimantan', 'gpKalimantan', dataW['Kalimantan']);
+  updateGPMCard('gpmSumatera', 'badgeSumatera', 'volSumatera', 'gpSumatera', dataW['Sumatera']);
 
   // Margin Gap Visuals
-  renderMarginGaps(gpmW);
+  renderMarginGaps(dataW);
 }
 
-function renderMarginGaps(gpmW) {
+function renderMarginGaps(dataW) {
   const container = document.getElementById('marginGapContainer');
   if (!container) return;
-  const jawa = gpmW['Jawa'] || 0, kalim = gpmW['Kalimantan'] || 0, suma = gpmW['Sumatera'] || 0;
-  const maxGpm = Math.max(jawa, kalim, suma, 1);
-  function pct(v) { return Math.max((v / (maxGpm * 1.2)) * 100, 5).toFixed(1); }
-  function gap(a, b) { return Math.abs(a - b).toFixed(1); }
-  function relDiff(a, b) { return b > 0 ? Math.abs(((a - b) / b) * 100).toFixed(0) : '0'; }
+  const jawa = dataW['Jawa'] ? dataW['Jawa'].gpm : 0;
+  const kalim = dataW['Kalimantan'] ? dataW['Kalimantan'].gpm : 0;
+  const suma = dataW['Sumatera'] ? dataW['Sumatera'].gpm : 0;
 
-  function gapCard(title, icon, borderColor, name1, val1, color1, name2, val2, color2, alertBg, alertBorder, alertText) {
-    const g = gap(val1, val2);
-    const rd = relDiff(val2, val1);
-    const lower = val1 > val2 ? name2 : name1;
-    const higher = val1 > val2 ? name1 : name2;
+  function gapCard(title, name1, val1, name2, val2) {
+    const diff = Math.abs(val1 - val2).toFixed(1);
     return `
-    <div class="bg-surface border ${borderColor} rounded-2xl p-6 shadow-sm flex flex-col h-full">
-      <div class="flex items-center gap-2 mb-6">
-        <i data-lucide="${icon}" class="w-5 h-5 ${alertText}"></i>
-        <h3 class="text-lg font-medium text-textMain">${title}</h3>
+    <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col hover:border-primary/50 transition-colors">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="trending-up" class="w-4 h-4 text-cyan-500"></i>
+        <h3 class="text-sm font-medium text-textSub">${title}</h3>
       </div>
-      <div class="space-y-4">
-        <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
-          <div class="absolute top-0 left-0 h-full ${color1} flex items-center justify-end pr-3 transition-all duration-1000" style="width:${pct(val1)}%">
-            <span class="text-xs font-bold text-white whitespace-nowrap">${name1}: ${val1.toFixed(1)}%</span>
-          </div>
-        </div>
-        <div class="relative w-full bg-bgMain rounded-full h-8 overflow-hidden border border-borderMain">
-          <div class="absolute top-0 left-0 h-full ${color2} flex items-center ${pct(val2) > 30 ? 'justify-end pr-3' : 'justify-start pl-3'} transition-all duration-1000" style="width:${pct(val2)}%">
-            <span class="text-xs font-bold text-white whitespace-nowrap">${name2}: ${val2.toFixed(1)}%</span>
-          </div>
-        </div>
+      <div class="mb-1">
+        <span class="text-3xl font-bold text-cyan-400">+${diff}%</span>
       </div>
-      <div class="mt-auto pt-6">
-        <div class="${alertBg} border ${alertBorder} rounded-xl p-4">
-          <p class="text-sm ${alertText} font-medium leading-relaxed">Gap: ${g}%<br/>Margin ${lower} ~${rd}% lebih rendah dari ${higher}</p>
-        </div>
+      <div class="text-xs text-textMuted">
+        [${name1}: ${val1.toFixed(1)}% | ${name2}: ${val2.toFixed(1)}%]
       </div>
     </div>`;
   }
 
   container.innerHTML =
-    gapCard('Margin Gap: Jawa vs Kalimantan', 'alert-triangle', 'border-warning/30', 'Jawa', jawa, 'bg-primary', 'Kalimantan', kalim, 'bg-warning', 'bg-warning/10', 'border-warning/20', 'text-warning') +
-    gapCard('Margin Gap: Jawa vs Sumatera', 'alert-circle', 'border-purple-500/30', 'Jawa', jawa, 'bg-primary', 'Sumatera', suma, 'bg-purple-500', 'bg-purple-500/10', 'border-purple-500/20', 'text-purple-400') +
-    gapCard('Margin Gap: Kalimantan vs Sumatera', 'alert-octagon', 'border-danger/30', 'Kalimantan', kalim, 'bg-warning', 'Sumatera', suma, 'bg-danger', 'bg-danger/10', 'border-danger/20', 'text-danger');
+    gapCard('Margin Gap Jawa vs Kalimantan', 'Kalimantan', kalim, 'Jawa', jawa) +
+    gapCard('Margin Gap Jawa vs Sumatera', 'Sumatera', suma, 'Jawa', jawa);
 
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }

@@ -155,32 +155,51 @@
       </div>
 
       <!-- Detail Cards -->
-      <div id="detailCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-primary">
-          <div>
-            <p class="text-textSub text-sm mb-1">GPM Jawa</p>
-            <h4 id="gpmJawa" class="text-2xl font-bold text-textMain">35.2%</h4>
+      <div class="mb-4">
+        <h3 class="text-lg font-medium text-textMain mb-4 mt-8">GPM per Wilayah & Margin Gap</h3>
+      </div>
+      
+      <div id="detailCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <!-- Jawa -->
+        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Jawa</p>
+            <div id="badgeJawa" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
           </div>
-          <div id="badgeJawa" class="px-3 py-1 bg-success/20 text-success text-xs rounded-full font-medium border border-success/30">Sehat</div>
+          <h4 id="gpmJawa" class="text-4xl font-bold text-cyan-400 mb-2">0.0%</h4>
+          <div class="text-xs text-textMuted space-y-1">
+            <p>Vol: <span id="volJawa">0</span> unit</p>
+            <p>GP: <span id="gpJawa">Rp 0</span></p>
+          </div>
         </div>
-        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-success">
-          <div>
-            <p class="text-textSub text-sm mb-1">GPM Kalimantan</p>
-            <h4 id="gpmKalimantan" class="text-2xl font-bold text-textMain">28.5%</h4>
+        <!-- Kalimantan -->
+        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Kalimantan</p>
+            <div id="badgeKalimantan" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
           </div>
-          <div id="badgeKalimantan" class="px-3 py-1 bg-warning/20 text-warning text-xs rounded-full font-medium border border-warning/30">Waspada</div>
+          <h4 id="gpmKalimantan" class="text-4xl font-bold text-cyan-400 mb-2">0.0%</h4>
+          <div class="text-xs text-textMuted space-y-1">
+            <p>Vol: <span id="volKalimantan">0</span> unit</p>
+            <p>GP: <span id="gpKalimantan">Rp 0</span></p>
+          </div>
         </div>
-        <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm flex items-center justify-between border-l-4 border-l-warning">
-          <div>
-            <p class="text-textSub text-sm mb-1">GPM Sumatera</p>
-            <h4 id="gpmSumatera" class="text-2xl font-bold text-textMain">12.4%</h4>
+        <!-- Sumatera -->
+        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div class="flex justify-between items-center mb-4">
+            <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Sumatera</p>
+            <div id="badgeSumatera" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
           </div>
-          <div id="badgeSumatera" class="px-3 py-1 bg-danger/20 text-danger text-xs rounded-full font-medium border border-danger/30">Bahaya</div>
+          <h4 id="gpmSumatera" class="text-4xl font-bold text-cyan-400 mb-2">0.0%</h4>
+          <div class="text-xs text-textMuted space-y-1">
+            <p>Vol: <span id="volSumatera">0</span> unit</p>
+            <p>GP: <span id="gpSumatera">Rp 0</span></p>
+          </div>
         </div>
       </div>
 
       <!-- Margin Gap Visuals (dynamically updated) -->
-      <div id="marginGapContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <div id="marginGapContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         <!-- Will be populated dynamically by charts.js -->
       </div>
 
