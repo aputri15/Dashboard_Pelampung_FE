@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Kelola Data | BI Pelampung</title>
   <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -19,6 +20,8 @@
             textSub: '#CBD5E1',
             textMuted: '#64748B',
             primary: '#3B82F6',
+            success: '#22C55E',
+            warning: '#F59E0B',
             danger: '#EF4444',
           }
         }
@@ -26,7 +29,7 @@
     }
   </script>
 </head>
-<body class="min-h-screen flex bg-bgMain">
+<body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
 
   <!-- Sidebar -->
   <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
@@ -35,32 +38,36 @@
         <i data-lucide="shield" class="w-6 h-6 text-white"></i>
       </div>
       <div>
-        <h1 class="text-lg font-bold text-textMain">Admin Panel</h1>
+        <h1 class="text-lg font-bold text-textMain tracking-tight">Admin Panel</h1>
         <p class="text-xs text-textSub">BI Pelampung</p>
       </div>
     </div>
     
     <nav class="flex-1 p-4 space-y-2">
-      <a href="upload.html" class="sidebar-link">
-        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-        <span>Upload Data</span>
+      <a href="upload.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="upload-cloud" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Upload Data</span>
       </a>
-      <a href="kelola.html" class="sidebar-link active">
-        <i data-lucide="database" class="w-5 h-5"></i>
-        <span>Kelola Data</span>
+      <a href="kelola.html" class="sidebar-link active relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="database" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Kelola Data</span>
       </a>
-      <a href="log.html" class="sidebar-link">
-        <i data-lucide="history" class="w-5 h-5"></i>
-        <span>Log Upload</span>
+      <a href="log.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="history" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Log Upload</span>
       </a>
-      <a href="akun.html" class="sidebar-link">
-        <i data-lucide="users" class="w-5 h-5"></i>
-        <span>Manajemen Akun</span>
+      <a href="akun.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="users" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Manajemen Akun</span>
       </a>
     </nav>
     
     <div class="p-4 border-t border-borderMain">
-      <button onclick="window.location.href='../index.html'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-textSub hover:bg-danger/10 hover:text-danger rounded-lg transition-all border border-transparent hover:border-danger/30">
+      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -71,110 +78,297 @@
   <main class="ml-64 flex-1 p-8">
     <div class="max-w-[1400px] mx-auto">
       
-      <div class="flex justify-between items-center mb-8">
+      <!-- Header -->
+      <div class="flex justify-between items-end mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-textMain">Kelola Data Transaksi</h2>
-          <p class="text-textSub mt-1">Lihat, edit, dan hapus data transaksi di database.</p>
+          <h2 class="text-3xl font-bold text-textMain tracking-tight">Kelola Data Transaksi</h2>
+          <p class="text-textSub mt-1">Lihat, cari, edit, dan hapus data transaksi yang ada di database.</p>
+        </div>
+        <div>
+          <button onclick="confirmDeleteAll()" class="btn btn-ghost hover:bg-danger/10 text-danger border border-danger/20 rounded-xl px-4 flex items-center gap-2 h-[46px]">
+            <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="glass-panel p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <div class="relative w-full md:w-80">
+            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="searchInput" placeholder="Cari No. PO, Pelanggan, Model..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all">
+          </div>
+          <select id="wilayahFilter" class="select select-bordered bg-bgMain/50 border-borderMain text-textMain rounded-xl text-sm h-[46px] min-h-[46px] px-4">
+            <option value="Semua">Semua Wilayah</option>
+            <!-- Injected dynamically -->
+          </select>
         </div>
         <div class="flex items-center gap-3">
-          <div class="relative">
-            <i data-lucide="search" class="w-4 h-4 text-textMuted absolute left-3 top-1/2 -translate-y-1/2"></i>
-            <input type="text" placeholder="Cari data PO..." class="pl-9 pr-4 py-2 bg-surface border border-borderMain rounded-lg text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none">
-          </div>
-          <select class="select select-bordered select-sm bg-surface border-borderMain text-textMain rounded-lg h-[38px]">
-            <option>Semua Bulan</option>
-            <option>Januari</option>
-            <option>Februari</option>
-          </select>
+           <button onclick="fetchData()" class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-4 h-[46px] min-h-[46px] font-medium transition-colors tooltip tooltip-bottom" data-tip="Muat Ulang Data">
+             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+           </button>
         </div>
       </div>
 
       <!-- Data Table -->
-      <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden">
+      <div class="glass-panel overflow-hidden">
         <div class="overflow-x-auto">
           <table class="table w-full text-sm">
             <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
               <tr>
-                <th class="py-4">No. PO</th>
-                <th>Tanggal</th>
-                <th>Pelanggan</th>
-                <th>Produk</th>
-                <th>Wilayah</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Harga Satuan</th>
-                <th class="text-center">Aksi</th>
+                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">No. PO & Tanggal</th>
+                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">Pelanggan & Lokasi</th>
+                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">Produk</th>
+                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Qty</th>
+                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Harga Satuan</th>
+                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Total</th>
+                <th class="py-5 px-4 text-center uppercase tracking-wider text-xs font-semibold">Aksi</th>
               </tr>
             </thead>
-            <tbody class="text-textMain divide-y divide-borderMain">
-              <tr class="hover:bg-bgMain/30 transition-colors">
-                <td class="font-medium">PO-2025-001</td>
-                <td class="text-textSub">01 Jan 2025</td>
-                <td>Toko Rezeki (Jakarta)</td>
-                <td>Pelampung Balsa</td>
-                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Jawa</span></td>
-                <td class="text-right font-medium">100</td>
-                <td class="text-right">Rp 15.000</td>
-                <td>
-                  <div class="flex items-center justify-center gap-2">
-                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="hover:bg-bgMain/30 transition-colors">
-                <td class="font-medium">PO-2025-002</td>
-                <td class="text-textSub">05 Jan 2025</td>
-                <td>Pancing Jaya (Medan)</td>
-                <td>Pelampung Fosfor</td>
-                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Sumatera</span></td>
-                <td class="text-right font-medium">50</td>
-                <td class="text-right">Rp 22.000</td>
-                <td>
-                  <div class="flex items-center justify-center gap-2">
-                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <!-- More static rows -->
-              <tr class="hover:bg-bgMain/30 transition-colors">
-                <td class="font-medium">PO-2025-003</td>
-                <td class="text-textSub">10 Jan 2025</td>
-                <td>Nelayan Sejahtera (Balikpapan)</td>
-                <td>Pelampung Balsa</td>
-                <td><span class="badge badge-outline border-borderMain text-textSub text-xs">Kalimantan</span></td>
-                <td class="text-right font-medium">200</td>
-                <td class="text-right">Rp 18.000</td>
-                <td>
-                  <div class="flex items-center justify-center gap-2">
-                    <button class="btn btn-xs btn-ghost text-primary hover:bg-primary/10"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button class="btn btn-xs btn-ghost text-danger hover:bg-danger/10"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
+            <tbody id="dataTableBody" class="text-textMain divide-y divide-borderMain/50">
+              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
         
         <!-- Pagination -->
-        <div class="p-4 border-t border-borderMain flex items-center justify-between text-sm text-textSub bg-bgMain/20">
-          <div>Menampilkan 1-3 dari 345 data</div>
-          <div class="join">
-            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">«</button>
-            <button class="join-item btn btn-sm bg-primary text-white hover:bg-blue-600 border-transparent">1</button>
-            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">2</button>
-            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">3</button>
-            <button class="join-item btn btn-sm bg-surface border-borderMain text-textSub hover:bg-bgMain">»</button>
+        <div class="p-5 border-t border-borderMain/50 flex items-center justify-between text-sm text-textSub bg-surface/50">
+          <div id="paginationInfo">Menampilkan 0 data</div>
+          <div class="flex gap-1">
+            <button id="btnPrev" class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Sebelumnya</button>
+            <span id="pageIndicator" class="btn btn-sm bg-primary border-transparent text-white pointer-events-none px-4">1</span>
+            <button id="btnNext" class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Selanjutnya</button>
           </div>
         </div>
-
       </div>
 
     </div>
   </main>
 
+  <!-- Modal Edit Transaksi -->
+  <dialog id="modal_edit" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box glass-panel p-0 max-w-2xl overflow-hidden relative">
+      <div class="p-8 relative z-10">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
+            <i data-lucide="edit-3" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-2xl text-textMain tracking-tight">Edit Transaksi</h3>
+            <p class="text-textSub text-sm mt-1">Perbarui data transaksi terpilih.</p>
+          </div>
+        </div>
+
+        <form class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Nomor PO</label>
+              <input type="text" id="edit_no_po" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" disabled>
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Tanggal</label>
+              <input type="text" id="edit_tanggal" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Pelanggan</label>
+              <input type="text" id="edit_pelanggan" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Wilayah</label>
+              <input type="text" id="edit_wilayah" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Kota</label>
+              <input type="text" id="edit_kota" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Produk</label>
+              <input type="text" id="edit_produk" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Qty</label>
+              <input type="number" id="edit_qty" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+            <div>
+              <label class="text-xs font-medium text-textSub mb-1 block">Harga Satuan</label>
+              <input type="number" id="edit_harga" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
+        <button onclick="modal_edit.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnSaveEdit" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl">Simpan</button>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>Tutup</button>
+    </form>
+  </dialog>
+
   <script>
+    requireAuth(['admin']);
     lucide.createIcons();
+
+    let currentPage = 1;
+    const perPage = 15;
+    let searchTimer = null;
+    let currentEditId = null;
+
+    const formatCurrency = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
+
+    async function loadWilayah() {
+      const res = await apiFetch('/transaksi/wilayah');
+      if (res && res.ok) {
+        const data = await res.json();
+        const select = document.getElementById('wilayahFilter');
+        data.forEach(w => {
+          if(w) select.innerHTML += `<option value="${w}">${w}</option>`;
+        });
+      }
+    }
+
+    async function fetchData() {
+      const tbody = document.getElementById('dataTableBody');
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12"><span class="loading loading-spinner text-primary"></span></td></tr>';
+
+      const search = document.getElementById('searchInput').value;
+      const wilayah = document.getElementById('wilayahFilter').value;
+      
+      let url = `/transaksi/?page=${currentPage}&per_page=${perPage}`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+      if (wilayah && wilayah !== 'Semua') url += `&wilayah=${encodeURIComponent(wilayah)}`;
+
+      const res = await apiFetch(url);
+      if (!res) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-danger">Gagal memuat data.</td></tr>';
+        return;
+      }
+
+      const { data, total, page } = await res.json();
+
+      document.getElementById('paginationInfo').innerHTML = `Menampilkan <span class="text-textMain font-medium">${data.length > 0 ? (page-1)*perPage + 1 : 0}-${(page-1)*perPage + data.length}</span> dari <span class="text-textMain font-medium">${total}</span> data`;
+      document.getElementById('pageIndicator').textContent = page;
+      
+      document.getElementById('btnPrev').disabled = page <= 1;
+      document.getElementById('btnNext').disabled = page * perPage >= total;
+
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-textMuted">Data tidak ditemukan.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(t => {
+        return `
+          <tr class="hover:bg-bgMain/40 transition-colors group">
+            <td class="px-4 py-4">
+              <div class="font-bold text-textMain">${t.nomor_po}</div>
+              <div class="text-xs text-textMuted">${t.tanggal_po}</div>
+            </td>
+            <td class="px-4 py-4">
+              <div class="font-medium">${t.nama_pelanggan}</div>
+              <div class="text-xs text-textSub flex items-center gap-1 mt-0.5">
+                <span class="px-1.5 py-0.5 rounded bg-surface border border-borderMain">${t.wilayah}</span> 
+                ${t.kota ? `· ${t.kota}` : ''}
+              </div>
+            </td>
+            <td class="px-4 py-4">
+              <div class="text-textMain">${t.nama_model}</div>
+              ${t.kategori ? `<div class="text-xs text-textMuted">${t.kategori}</div>` : ''}
+            </td>
+            <td class="px-4 py-4 text-right font-medium">${t.qty.toLocaleString('id-ID')}</td>
+            <td class="px-4 py-4 text-right text-textSub">${formatCurrency(t.harga_satuan)}</td>
+            <td class="px-4 py-4 text-right font-bold text-primary">${formatCurrency(t.total_harga)}</td>
+            <td class="px-4 py-4">
+              <div class="flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onclick='openEditModal(${JSON.stringify(t).replace(/'/g, "&apos;")})' class="btn btn-sm btn-ghost text-primary hover:bg-primary/20 rounded-lg h-8 w-8 p-0"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                <button onclick="deleteRow(${t.id})" class="btn btn-sm btn-ghost text-danger hover:bg-danger/20 rounded-lg h-8 w-8 p-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      
+      lucide.createIcons();
+    }
+
+    // Event Listeners
+    document.getElementById('searchInput').addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
+    });
+    document.getElementById('wilayahFilter').addEventListener('change', () => { currentPage = 1; fetchData(); });
+    document.getElementById('btnPrev').addEventListener('click', () => { if(currentPage > 1) { currentPage--; fetchData(); } });
+    document.getElementById('btnNext').addEventListener('click', () => { currentPage++; fetchData(); });
+
+    // Actions
+    async function deleteRow(id) {
+      if(!confirm("Yakin ingin menghapus data ini?")) return;
+      const res = await apiFetch(`/transaksi/${id}`, { method: 'DELETE' });
+      if(res && res.ok) fetchData();
+      else alert('Gagal menghapus data');
+    }
+
+    async function confirmDeleteAll() {
+      if(!confirm("PERINGATAN: Anda akan menghapus SEMUA data transaksi. Tindakan ini tidak dapat dibatalkan. Lanjutkan?")) return;
+      const res = await apiFetch(`/transaksi/`, { method: 'DELETE' });
+      if(res && res.ok) {
+        alert('Semua data transaksi berhasil dihapus.');
+        currentPage = 1;
+        fetchData();
+      } else {
+        alert('Gagal menghapus semua data.');
+      }
+    }
+
+    function openEditModal(t) {
+      currentEditId = t.id;
+      document.getElementById('edit_no_po').value = t.nomor_po || '';
+      document.getElementById('edit_tanggal').value = t.tanggal_po || '';
+      document.getElementById('edit_pelanggan').value = t.nama_pelanggan || '';
+      document.getElementById('edit_wilayah').value = t.wilayah || '';
+      document.getElementById('edit_kota').value = t.kota || '';
+      document.getElementById('edit_produk').value = t.nama_model || '';
+      document.getElementById('edit_qty').value = t.qty || 0;
+      document.getElementById('edit_harga').value = t.harga_satuan || 0;
+      modal_edit.showModal();
+    }
+
+    document.getElementById('btnSaveEdit').addEventListener('click', async () => {
+      if(!currentEditId) return;
+      
+      const qty = parseInt(document.getElementById('edit_qty').value) || 0;
+      const harga = parseFloat(document.getElementById('edit_harga').value) || 0;
+
+      const body = {
+        tanggal_po: document.getElementById('edit_tanggal').value,
+        nama_pelanggan: document.getElementById('edit_pelanggan').value,
+        wilayah: document.getElementById('edit_wilayah').value,
+        kota: document.getElementById('edit_kota').value,
+        nama_model: document.getElementById('edit_produk').value,
+        qty: qty,
+        harga_satuan: harga,
+        total_harga: qty * harga // Auto calc
+      };
+
+      const res = await apiFetch(`/transaksi/${currentEditId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if(res && res.ok) {
+        modal_edit.close();
+        fetchData();
+      } else {
+        alert('Gagal menyimpan perubahan');
+      }
+    });
+
+    // Init
+    loadWilayah();
+    fetchData();
   </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Manajemen Akun | BI Pelampung</title>
   <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -61,7 +62,7 @@
     </nav>
     
     <div class="p-4 border-t border-borderMain">
-      <button onclick="window.location.href='../index.html'" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
+      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -104,7 +105,7 @@
            <button class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-5 h-[46px] min-h-[46px] font-medium transition-colors">
              <i data-lucide="filter" class="w-4 h-4 mr-2"></i> Filter Lanjutan
            </button>
-           <button class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-4 h-[46px] min-h-[46px] font-medium transition-colors tooltip tooltip-bottom" data-tip="Muat Ulang Data">
+           <button onclick="loadUsers()" class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-4 h-[46px] min-h-[46px] font-medium transition-colors tooltip tooltip-bottom" data-tip="Muat Ulang Data">
              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
            </button>
         </div>
@@ -124,116 +125,8 @@
                 <th class="py-5 px-6 text-center uppercase tracking-wider text-xs font-semibold">Aksi</th>
               </tr>
             </thead>
-            <tbody class="text-textMain divide-y divide-borderMain/50">
-              
-              <!-- Row 1 -->
-              <tr class="hover:bg-bgMain/40 transition-colors group">
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg">
-                      AU
-                    </div>
-                    <div>
-                      <div class="font-bold text-textMain">Admin Utama</div>
-                      <div class="text-xs text-textMuted mt-0.5">admin.utama@pelampung.com</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 font-mono text-textSub">admin1</td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                    <i data-lucide="shield" class="w-3 h-3"></i> Admin
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-xs font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-success"></span> Aktif
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-textMain">Baru saja</div>
-                  <div class="text-xs text-textMuted mt-0.5">IP: 192.168.1.1</div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="modal_edit.showModal()" class="btn btn-sm btn-ghost text-primary hover:bg-primary/20 rounded-lg tooltip tooltip-top" data-tip="Edit Akun"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button onclick="modal_delete.showModal()" class="btn btn-sm btn-ghost text-danger hover:bg-danger/20 rounded-lg tooltip tooltip-top" data-tip="Hapus Akun"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 2 -->
-              <tr class="hover:bg-bgMain/40 transition-colors group">
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg">
-                      OP
-                    </div>
-                    <div>
-                      <div class="font-bold text-textMain">Owner Perusahaan</div>
-                      <div class="text-xs text-textMuted mt-0.5">owner@pelampung.com</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 font-mono text-textSub">owner</td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium">
-                    <i data-lucide="briefcase" class="w-3 h-3"></i> Owner
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-xs font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-success"></span> Aktif
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-textMain">Kemarin, 14:30</div>
-                  <div class="text-xs text-textMuted mt-0.5">IP: 114.120.45.2</div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="modal_edit.showModal()" class="btn btn-sm btn-ghost text-primary hover:bg-primary/20 rounded-lg tooltip tooltip-top" data-tip="Edit Akun"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button onclick="modal_delete.showModal()" class="btn btn-sm btn-ghost text-danger hover:bg-danger/20 rounded-lg tooltip tooltip-top" data-tip="Hapus Akun"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Row 3 -->
-              <tr class="hover:bg-bgMain/40 transition-colors group">
-                <td class="px-6 py-4">
-                  <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-surface border border-borderMain flex items-center justify-center text-textMuted font-bold">
-                      SA
-                    </div>
-                    <div>
-                      <div class="font-bold text-textMain opacity-50">Staff Admin 2</div>
-                      <div class="text-xs text-textMuted mt-0.5">staff2@pelampung.com</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 font-mono text-textSub opacity-50">admin2</td>
-                <td class="px-6 py-4 opacity-50">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
-                    <i data-lucide="shield" class="w-3 h-3"></i> Admin
-                  </span>
-                </td>
-                <td class="px-6 py-4">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-borderMain text-textMuted text-xs font-medium">
-                    <span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span> Nonaktif
-                  </span>
-                </td>
-                <td class="px-6 py-4 opacity-50">
-                  <div class="text-textMain">10 Mar 2025</div>
-                  <div class="text-xs text-textMuted mt-0.5">IP: 192.168.1.5</div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onclick="modal_edit.showModal()" class="btn btn-sm btn-ghost text-primary hover:bg-primary/20 rounded-lg tooltip tooltip-top" data-tip="Edit Akun"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                    <button onclick="modal_delete.showModal()" class="btn btn-sm btn-ghost text-danger hover:bg-danger/20 rounded-lg tooltip tooltip-top" data-tip="Hapus Akun"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                  </div>
-                </td>
-              </tr>
-
+            <tbody id="usersTableBody" class="text-textMain divide-y divide-borderMain/50">
+              <!-- Rows will be rendered dynamically from API -->
             </tbody>
           </table>
         </div>
@@ -338,10 +231,8 @@
       </div>
       
       <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
-        <form method="dialog">
-          <button class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-          <button class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20" onclick="showToast('Akun baru berhasil ditambahkan!')">Buat Akun</button>
-        </form>
+        <button onclick="modal_tambah.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnCreateUser" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Buat Akun</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -386,9 +277,8 @@
               <label class="text-sm font-medium text-textSub">Username</label>
               <div class="relative">
                 <i data-lucide="at-sign" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="text" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain" value="admin1" disabled>
+                <input type="text" id="edit_username" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain" value="">
               </div>
-              <p class="text-[11px] text-textMuted mt-1">Username tidak dapat diubah</p>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Password Baru</label>
@@ -419,10 +309,8 @@
       </div>
       
       <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
-        <form method="dialog">
-          <button class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-          <button class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20" onclick="showToast('Perubahan profil berhasil disimpan!')">Simpan Perubahan</button>
-        </form>
+        <button onclick="modal_edit.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnSaveEdit" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Simpan Perubahan</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -439,13 +327,13 @@
         </div>
       </div>
       <h3 class="font-bold text-2xl text-textMain mb-2">Hapus Pengguna?</h3>
-      <p class="text-textSub text-sm leading-relaxed mb-8">Anda akan menghapus akun <span class="font-bold text-textMain">Admin Utama</span> secara permanen. Tindakan ini tidak dapat dibatalkan dan pengguna akan kehilangan semua akses.</p>
+      <p class="text-textSub text-sm leading-relaxed mb-8">Anda akan menghapus akun <span id="deleteUserName" class="font-bold text-textMain">-</span> secara permanen. Tindakan ini tidak dapat dibatalkan dan pengguna akan kehilangan semua akses.</p>
       
       <div class="flex justify-center gap-3">
-        <form method="dialog" class="w-full flex gap-3">
-          <button class="btn btn-ghost hover:bg-surface border border-borderMain text-textMain flex-1 rounded-xl">Batal</button>
-          <button class="btn bg-danger hover:bg-red-600 text-white border-transparent flex-1 rounded-xl shadow-lg shadow-danger/20" onclick="showToast('Akun telah berhasil dihapus.')">Hapus Permanen</button>
-        </form>
+        <div class="w-full flex gap-3">
+          <button onclick="modal_delete.close()" class="btn btn-ghost hover:bg-surface border border-borderMain text-textMain flex-1 rounded-xl">Batal</button>
+          <button id="btnConfirmDelete" class="btn bg-danger hover:bg-red-600 text-white border-transparent flex-1 rounded-xl shadow-lg shadow-danger/20">Hapus Permanen</button>
+        </div>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -467,25 +355,221 @@
   </div>
 
   <script>
+    // Auth guard: only admin can access this page
+    requireAuth(['admin']);
+    
     lucide.createIcons();
 
-    // Advanced toast notification function
+    let currentEditId = null;
+    let currentDeleteId = null;
+
+    // Toast notification
     function showToast(message) {
       const toast = document.getElementById('toast');
       const toastMessage = document.getElementById('toast-message');
-      
       toastMessage.textContent = message;
-      
-      // Show
       toast.classList.remove('translate-y-32', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
-      
-      // Hide after 4 seconds
       setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
         toast.classList.add('translate-y-32', 'opacity-0');
       }, 4000);
     }
+
+    // ===== RENDER TABLE FROM API =====
+    async function loadUsers() {
+      const res = await apiFetch('/users/');
+      if (!res) return;
+      let users = await res.json();
+      const tbody = document.getElementById('usersTableBody');
+      
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-textMuted">Belum ada data pengguna.</td></tr>';
+        return;
+      }
+
+      // Filter Logic
+      const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+      const roleFilter = roleSelect ? roleSelect.value : 'Semua Role';
+
+      users = users.filter(u => {
+        const matchesSearch = !searchTerm || 
+          u.full_name.toLowerCase().includes(searchTerm) || 
+          u.username.toLowerCase().includes(searchTerm) || 
+          u.email.toLowerCase().includes(searchTerm);
+          
+        let matchesRole = true;
+        if (roleFilter === 'Administrator') matchesRole = u.role === 'admin';
+        else if (roleFilter === 'Owner') matchesRole = u.role === 'owner';
+
+        return matchesSearch && matchesRole;
+      });
+
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-textMuted">Tidak ada pengguna yang cocok dengan filter.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        const initials = u.full_name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        const isAdmin = u.role === 'admin';
+        const isActive = u.is_active;
+        const gradient = isAdmin ? 'from-primary to-indigo-600' : 'from-purple-500 to-pink-500';
+        const avatarClass = isActive ? `bg-gradient-to-br ${gradient} text-white shadow-lg` : 'bg-surface border border-borderMain text-textMuted';
+        const roleBadge = isAdmin
+          ? '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium"><i data-lucide="shield" class="w-3 h-3"></i> Admin</span>'
+          : '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium"><i data-lucide="briefcase" class="w-3 h-3"></i> Owner</span>';
+        const statusBadge = isActive
+          ? '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-success text-xs font-medium"><span class="w-1.5 h-1.5 rounded-full bg-success"></span> Aktif</span>'
+          : '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-borderMain text-textMuted text-xs font-medium"><span class="w-1.5 h-1.5 rounded-full bg-textMuted"></span> Nonaktif</span>';
+        const dimClass = isActive ? '' : 'opacity-50';
+        const lastLogin = u.last_login ? new Date(u.last_login + "Z").toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Belum pernah';
+
+        return `<tr class="hover:bg-bgMain/40 transition-colors group">
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full ${avatarClass} flex items-center justify-center font-bold">${initials}</div>
+              <div>
+                <div class="font-bold text-textMain ${dimClass}">${u.full_name}</div>
+                <div class="text-xs text-textMuted mt-0.5">${u.email}</div>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 font-mono text-textSub ${dimClass}">${u.username}</td>
+          <td class="px-6 py-4 ${dimClass}">${roleBadge}</td>
+          <td class="px-6 py-4">${statusBadge}</td>
+          <td class="px-6 py-4 ${dimClass}"><div class="text-textMain">${lastLogin}</div></td>
+          <td class="px-6 py-4">
+            <div class="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onclick="openEditModal(${u.id})" class="btn btn-sm btn-ghost text-primary hover:bg-primary/20 rounded-lg"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+              <button onclick="openDeleteModal(${u.id}, '${u.full_name.replace(/'/g, "\\'")}')"
+                class="btn btn-sm btn-ghost text-danger hover:bg-danger/20 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Add filter logic
+    const searchInput = document.querySelector('input[placeholder="Cari berdasarkan nama, username, atau email..."]');
+    const roleSelect = document.querySelector('.glass-panel select');
+
+    searchInput.addEventListener('input', () => {
+      clearTimeout(window.searchTimer);
+      window.searchTimer = setTimeout(loadUsers, 300);
+    });
+
+    roleSelect.addEventListener('change', loadUsers);
+
+    // ===== CREATE USER =====
+    document.getElementById('btnCreateUser').addEventListener('click', async () => {
+      const box = document.querySelector('#modal_tambah .modal-box');
+      const inputs = box.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+      const name = inputs[0]?.value;
+      const email = inputs[1]?.value;
+      const username = inputs[2]?.value;
+      const password = inputs[3]?.value;
+      const role = box.querySelector('input[name="role_add"]:checked')?.value || 'admin';
+
+      if (!name || !email || !username || !password) { showToast('Semua field wajib diisi!'); return; }
+
+      const res = await apiFetch('/users/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name: name, email, username, password, role })
+      });
+
+      if (res && res.ok) {
+        modal_tambah.close();
+        // Reset form fields
+        inputs.forEach(i => i.value = '');
+        showToast('Akun baru berhasil ditambahkan!');
+        loadUsers();
+      } else {
+        const err = await res?.json();
+        showToast(err?.detail || 'Gagal menambahkan akun');
+      }
+    });
+
+    // ===== EDIT USER =====
+    async function openEditModal(userId) {
+      currentEditId = userId;
+      const res = await apiFetch('/users/');
+      if (!res) return;
+      const users = await res.json();
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+
+      const box = document.querySelector('#modal_edit .modal-box');
+      const inputs = box.querySelectorAll('input');
+      inputs[0].value = user.full_name;
+      inputs[1].value = user.email;
+      inputs[2].value = user.username;
+      inputs[3].value = '';
+
+      const selects = box.querySelectorAll('select');
+      selects[0].value = user.role === 'admin' ? 'Administrator' : 'Owner';
+      selects[1].value = user.is_active ? 'Aktif' : 'Nonaktif (Suspend)';
+
+      modal_edit.showModal();
+    }
+
+    document.getElementById('btnSaveEdit').addEventListener('click', async () => {
+      if (!currentEditId) return;
+      const box = document.querySelector('#modal_edit .modal-box');
+      const inputs = box.querySelectorAll('input');
+      const selects = box.querySelectorAll('select');
+
+      const body = {
+        full_name: inputs[0].value,
+        email: inputs[1].value,
+        username: inputs[2].value,
+        role: selects[0].value === 'Administrator' ? 'admin' : 'owner',
+        is_active: selects[1].value === 'Aktif'
+      };
+      if (inputs[3].value) body.password = inputs[3].value;
+
+      const res = await apiFetch(`/users/${currentEditId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (res && res.ok) {
+        modal_edit.close();
+        showToast('Perubahan profil berhasil disimpan!');
+        loadUsers();
+      } else {
+        const err = await res?.json();
+        showToast(err?.detail || 'Gagal menyimpan perubahan');
+      }
+    });
+
+    // ===== DELETE USER =====
+    function openDeleteModal(userId, fullName) {
+      currentDeleteId = userId;
+      document.getElementById('deleteUserName').textContent = fullName;
+      modal_delete.showModal();
+    }
+
+    document.getElementById('btnConfirmDelete').addEventListener('click', async () => {
+      if (!currentDeleteId) return;
+      const res = await apiFetch(`/users/${currentDeleteId}`, { method: 'DELETE' });
+
+      if (res && res.ok) {
+        modal_delete.close();
+        showToast('Akun telah berhasil dihapus.');
+        loadUsers();
+      } else {
+        const err = await res?.json();
+        showToast(err?.detail || 'Gagal menghapus akun');
+      }
+    });
+
+    // ===== INITIAL LOAD =====
+    loadUsers();
   </script>
 </body>
 </html>

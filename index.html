@@ -74,30 +74,83 @@
       <div class="mt-6 p-4 bg-[#0F172A]/50 rounded-xl border border-borderMain/50">
         <p class="text-xs text-textMuted mb-2 font-medium">Demo credentials:</p>
         <div class="text-xs text-textSub space-y-1">
-          <div class="flex justify-between"><span class="font-medium text-textMain">Admin:</span> <span>admin / admin123</span></div>
-          <div class="flex justify-between"><span class="font-medium text-textMain">Owner:</span> <span>owner / owner123</span></div>
+          <div class="flex justify-between"><span class="font-medium text-textMain">Admin:</span> <span>admin / adminpassword</span></div>
+          <div class="flex justify-between"><span class="font-medium text-textMain">Owner:</span> <span>owner / ownerpassword</span></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    const API_BASE = 'http://127.0.0.1:8000/api/v1';
+    
     lucide.createIcons();
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // If already logged in, redirect
+    if (localStorage.getItem('access_token')) {
+      const role = localStorage.getItem('user_role');
+      if (role === 'admin') window.location.href = './admin/upload.html';
+      else if (role === 'owner') window.location.href = './owner/dashboard.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const user = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
       const errorMsg = document.getElementById('errorMsg');
+      const errorText = errorMsg.querySelector('span');
+      const submitBtn = this.querySelector('button[type="submit"]');
 
       errorMsg.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> <span>Memproses...</span>';
 
-      if (user === 'admin' && pass === 'admin123') {
-        window.location.href = './admin/upload.html';
-      } else if (user === 'owner' && pass === 'owner123') {
-        window.location.href = './owner/dashboard.html';
-      } else {
+      try {
+        // Login via API
+        const formData = new URLSearchParams();
+        formData.append('username', user);
+        formData.append('password', pass);
+        
+        const loginRes = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData
+        });
+
+        if (!loginRes.ok) {
+          const err = await loginRes.json();
+          throw new Error(err.detail || 'Login gagal');
+        }
+
+        const tokens = await loginRes.json();
+        
+        // Get user profile
+        const meRes = await fetch(`${API_BASE}/auth/me`, {
+          headers: { 'Authorization': `Bearer ${tokens.access_token}` }
+        });
+        const profile = await meRes.json();
+
+        // Store auth data
+        localStorage.setItem('access_token', tokens.access_token);
+        localStorage.setItem('refresh_token', tokens.refresh_token);
+        localStorage.setItem('user_role', profile.role);
+        localStorage.setItem('user_name', profile.full_name);
+        localStorage.setItem('user_id', profile.id);
+
+        // Redirect by role (RBAC)
+        if (profile.role === 'admin') {
+          window.location.href = './admin/upload.html';
+        } else if (profile.role === 'owner') {
+          window.location.href = './owner/dashboard.html';
+        }
+
+      } catch (err) {
+        errorText.textContent = err.message || 'Terjadi kesalahan saat login';
         errorMsg.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i> Login';
+        lucide.createIcons();
       }
     });
   </script>

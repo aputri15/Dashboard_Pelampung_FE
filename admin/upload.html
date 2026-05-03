@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Upload Data | BI Pelampung</title>
   <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -27,7 +28,7 @@
     }
   </script>
 </head>
-<body class="min-h-screen flex bg-bgMain">
+<body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
 
   <!-- Sidebar -->
   <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
@@ -36,32 +37,36 @@
         <i data-lucide="shield" class="w-6 h-6 text-white"></i>
       </div>
       <div>
-        <h1 class="text-lg font-bold text-textMain">Admin Panel</h1>
+        <h1 class="text-lg font-bold text-textMain tracking-tight">Admin Panel</h1>
         <p class="text-xs text-textSub">BI Pelampung</p>
       </div>
     </div>
     
     <nav class="flex-1 p-4 space-y-2">
-      <a href="upload.html" class="sidebar-link active">
-        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-        <span>Upload Data</span>
+      <a href="upload.html" class="sidebar-link active relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <i data-lucide="upload-cloud" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Upload Data</span>
       </a>
-      <a href="kelola.html" class="sidebar-link">
-        <i data-lucide="database" class="w-5 h-5"></i>
-        <span>Kelola Data</span>
+      <a href="kelola.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="database" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Kelola Data</span>
       </a>
-      <a href="log.html" class="sidebar-link">
-        <i data-lucide="history" class="w-5 h-5"></i>
-        <span>Log Upload</span>
+      <a href="log.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="history" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Log Upload</span>
       </a>
-      <a href="akun.html" class="sidebar-link">
-        <i data-lucide="users" class="w-5 h-5"></i>
-        <span>Manajemen Akun</span>
+      <a href="akun.html" class="sidebar-link relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+        <i data-lucide="users" class="w-5 h-5 relative z-10"></i>
+        <span class="relative z-10">Manajemen Akun</span>
       </a>
     </nav>
     
     <div class="p-4 border-t border-borderMain">
-      <button onclick="window.location.href='../index.html'" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-textSub hover:bg-danger/10 hover:text-danger rounded-lg transition-all border border-transparent hover:border-danger/30">
+      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -72,44 +77,57 @@
   <main class="ml-64 flex-1 p-8">
     <div class="max-w-4xl mx-auto">
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-textMain">Upload Data Transaksi</h2>
+        <h2 class="text-3xl font-bold text-textMain tracking-tight">Upload Data Transaksi</h2>
         <p class="text-textSub mt-1">Upload file Excel data transaksi bulanan ke sistem database.</p>
       </div>
 
       <!-- Upload Card -->
-      <div class="bg-surface border border-borderMain rounded-2xl p-8 shadow-sm">
+      <div class="glass-panel p-8">
         
-        <div class="border-2 border-dashed border-borderMain rounded-xl p-12 flex flex-col items-center justify-center bg-bgMain/50 hover:bg-bgMain/80 transition-all group cursor-pointer relative">
-          <input type="file" id="fileInput" accept=".xlsx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+        <div id="dropZone" class="border-2 border-dashed border-borderMain rounded-xl p-12 flex flex-col items-center justify-center bg-bgMain/50 hover:bg-bgMain/80 transition-all group cursor-pointer relative overflow-hidden">
+          <input type="file" id="fileInput" accept=".xlsx, .xls" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
           <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-            <i data-lucide="upload" class="w-8 h-8 text-primary"></i>
+            <i data-lucide="file-spreadsheet" class="w-8 h-8 text-primary"></i>
           </div>
           <h3 class="text-lg font-medium text-textMain mb-2 text-center" id="fileName">Tarik dan lepas file Excel di sini</h3>
-          <p class="text-sm text-textMuted text-center">Atau klik untuk memilih file (format .xlsx)</p>
+          <p class="text-sm text-textMuted text-center">Atau klik untuk memilih file (format .xlsx, .xls) max 10MB</p>
         </div>
 
         <div class="mt-8 flex justify-end gap-3">
-          <button class="px-5 py-2.5 rounded-lg border border-borderMain text-textSub hover:bg-surface hover:text-textMain transition-all">
+          <button id="btnCancel" class="px-5 py-2.5 rounded-xl border border-borderMain text-textSub hover:bg-surface hover:text-textMain transition-all">
             Batal
           </button>
-          <button class="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-blue-600 shadow-lg shadow-primary/20 flex items-center gap-2 font-medium transition-all" onclick="alert('Simulasi upload berhasil!')">
-            <i data-lucide="check-circle" class="w-5 h-5"></i>
-            Upload Sekarang
+          <button id="btnUpload" class="px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-blue-600 shadow-lg shadow-primary/20 flex items-center gap-2 font-medium transition-all">
+            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+            <span>Upload Sekarang</span>
           </button>
+        </div>
+
+        <!-- Progress/Result Area -->
+        <div id="uploadResult" class="mt-6 hidden">
+          <div id="resultAlert" class="p-4 rounded-xl border flex items-start gap-3">
+            <div id="resultIcon" class="mt-0.5"></div>
+            <div>
+              <h4 id="resultTitle" class="font-bold text-sm"></h4>
+              <p id="resultMessage" class="text-sm mt-1"></p>
+              <div id="errorList" class="mt-2 space-y-1 text-xs"></div>
+            </div>
+          </div>
         </div>
 
       </div>
 
       <!-- Instructions Card -->
-      <div class="mt-8 bg-primary/5 border border-primary/20 rounded-2xl p-6">
-        <h4 class="flex items-center gap-2 text-primary font-medium mb-3">
+      <div class="mt-8 bg-primary/5 border border-primary/20 rounded-2xl p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -mt-10 -mr-10 pointer-events-none"></div>
+        <h4 class="flex items-center gap-2 text-primary font-medium mb-3 relative z-10">
           <i data-lucide="info" class="w-5 h-5"></i> Panduan Upload
         </h4>
-        <ul class="list-disc list-inside text-sm text-textSub space-y-2">
-          <li>Pastikan file dalam format Excel (.xlsx)</li>
-          <li>Data harus memiliki kolom yang wajib seperti: Nomor PO, Tanggal, Pelanggan, Produk, Qty, Harga.</li>
-          <li>ID Produk harus sesuai dengan Master Barang di database.</li>
-          <li>Sistem akan melakukan validasi format sebelum menyimpan.</li>
+        <ul class="list-disc list-inside text-sm text-textSub space-y-2 relative z-10">
+          <li>Pastikan file dalam format Excel (.xlsx atau .xls).</li>
+          <li>Data harus memiliki kolom yang wajib seperti: <b>Nomor PO, Tanggal, Pelanggan, Produk, Qty, Harga</b>.</li>
+          <li>Format tanggal bebas, sistem akan menyimpannya sebagai teks.</li>
+          <li>Sistem akan otomatis membersihkan dan memvalidasi format angka sebelum menyimpan ke database.</li>
         </ul>
       </div>
 
@@ -117,13 +135,127 @@
   </main>
 
   <script>
+    // Guard
+    requireAuth(['admin']);
     lucide.createIcons();
     
-    // Simple logic to show selected file name
-    document.getElementById('fileInput').addEventListener('change', function(e) {
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileName');
+    const dropZone = document.getElementById('dropZone');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnUpload = document.getElementById('btnUpload');
+    const uploadResult = document.getElementById('uploadResult');
+    const resultAlert = document.getElementById('resultAlert');
+    const resultIcon = document.getElementById('resultIcon');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultMessage = document.getElementById('resultMessage');
+    const errorList = document.getElementById('errorList');
+
+    let selectedFile = null;
+
+    fileInput.addEventListener('change', function(e) {
       if(e.target.files.length > 0) {
-        document.getElementById('fileName').textContent = e.target.files[0].name;
-        document.getElementById('fileName').classList.add('text-primary');
+        selectedFile = e.target.files[0];
+        fileNameDisplay.textContent = selectedFile.name;
+        fileNameDisplay.classList.add('text-primary');
+        uploadResult.classList.add('hidden');
+      }
+    });
+
+    // Drag and drop visual cues
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, () => dropZone.classList.add('border-primary', 'bg-primary/5'), false);
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-primary', 'bg-primary/5'), false);
+    });
+    dropZone.addEventListener('drop', (e) => {
+      let dt = e.dataTransfer;
+      let files = dt.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    btnCancel.addEventListener('click', () => {
+      fileInput.value = '';
+      selectedFile = null;
+      fileNameDisplay.textContent = 'Tarik dan lepas file Excel di sini';
+      fileNameDisplay.classList.remove('text-primary');
+      uploadResult.classList.add('hidden');
+    });
+
+    btnUpload.addEventListener('click', async () => {
+      if (!selectedFile) {
+        alert('Silakan pilih file Excel terlebih dahulu!');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      btnUpload.disabled = true;
+      const originalText = btnUpload.innerHTML;
+      btnUpload.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> <span>Memproses...</span>';
+
+      try {
+        const token = localStorage.getItem('access_token');
+        // We bypass apiFetch here because we need to send FormData without Content-Type header (browser sets it with boundary)
+        const res = await fetch('http://127.0.0.1:8000/api/v1/transaksi/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        const data = await res.json();
+        uploadResult.classList.remove('hidden');
+        errorList.innerHTML = '';
+
+        if (res.ok && data.success) {
+          resultAlert.className = 'p-4 rounded-xl border flex items-start gap-3 bg-success/10 border-success/20 text-success';
+          resultIcon.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i>';
+          resultTitle.textContent = 'Upload Berhasil';
+          resultMessage.textContent = data.message;
+          
+          if (data.errors && data.errors.length > 0) {
+            errorList.innerHTML = data.errors.map(err => `<div class="text-danger">${err}</div>`).join('');
+          }
+          
+          // Reset file
+          fileInput.value = '';
+          selectedFile = null;
+          fileNameDisplay.textContent = 'Tarik dan lepas file Excel di sini';
+          fileNameDisplay.classList.remove('text-primary');
+        } else {
+          resultAlert.className = 'p-4 rounded-xl border flex items-start gap-3 bg-danger/10 border-danger/20 text-danger';
+          resultIcon.innerHTML = '<i data-lucide="alert-triangle" class="w-5 h-5"></i>';
+          resultTitle.textContent = 'Upload Gagal / Ada Peringatan';
+          resultMessage.textContent = data.message || data.detail || 'Terjadi kesalahan sistem.';
+          
+          if (data.errors && data.errors.length > 0) {
+            errorList.innerHTML = data.errors.map(err => `<div>- ${err}</div>`).join('');
+          }
+        }
+        lucide.createIcons();
+
+      } catch (err) {
+        console.error(err);
+        uploadResult.classList.remove('hidden');
+        resultAlert.className = 'p-4 rounded-xl border flex items-start gap-3 bg-danger/10 border-danger/20 text-danger';
+        resultIcon.innerHTML = '<i data-lucide="alert-triangle" class="w-5 h-5"></i>';
+        resultTitle.textContent = 'Koneksi Error';
+        resultMessage.textContent = 'Gagal menghubungi server. Pastikan backend menyala.';
+        lucide.createIcons();
+      } finally {
+        btnUpload.disabled = false;
+        btnUpload.innerHTML = originalText;
       }
     });
   </script>
