@@ -30,8 +30,11 @@
 </head>
 <body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
 
+  <!-- Mobile Overlay -->
+  <div id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
-  <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
+  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
       <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
         <i data-lucide="shield" class="w-6 h-6 text-white"></i>
@@ -73,8 +76,16 @@
     </div>
   </aside>
 
+  <!-- Mobile Top Bar (hamburger) -->
+  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+    <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+    <span class="text-base font-bold text-textMain">Admin Panel</span>
+  </div>
+
   <!-- Main Content -->
-  <main class="ml-64 flex-1 p-8">
+  <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-4xl mx-auto">
       <div class="mb-8">
         <h2 class="text-3xl font-bold text-textMain tracking-tight">Upload Data Transaksi</h2>
@@ -138,6 +149,15 @@
     // Guard
     requireAuth(['admin']);
     lucide.createIcons();
+
+    function openSidebar() {
+      document.getElementById('adminSidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('active');
+    }
+    function closeSidebar() {
+      document.getElementById('adminSidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
     
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileName');

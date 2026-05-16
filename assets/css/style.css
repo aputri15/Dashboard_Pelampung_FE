@@ -20,16 +20,127 @@
   @apply w-full bg-primary text-white py-3 rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 font-medium;
 }
 
+/* ===== SIDEBAR (Desktop) ===== */
 .sidebar-link {
   @apply flex items-center gap-3 px-4 py-3 rounded-xl text-textSub hover:bg-surface hover:text-textMain transition-all;
 }
+
 .sidebar-link.active {
   @apply bg-primary/10 text-primary font-medium;
 }
 
+/* ===== TAB NAVIGATION ===== */
 .tab-btn {
-  @apply flex items-center gap-2 px-5 py-3 whitespace-nowrap relative transition-all text-textMuted hover:text-textMain hover:bg-surface rounded-t-lg;
+  @apply flex items-center gap-2 px-4 py-3 whitespace-nowrap relative transition-all text-textMuted hover:text-textMain hover:bg-surface rounded-t-lg text-sm;
 }
+
 .tab-btn.active {
   @apply text-primary font-medium bg-surface border-b-2 border-primary;
+}
+
+/* ===== MOBILE SIDEBAR OVERLAY ===== */
+#sidebarOverlay {
+  @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden;
+  transition: opacity 0.25s ease;
+}
+
+#sidebarOverlay.active {
+  @apply flex;
+}
+
+/* Admin sidebar: slide in from left on mobile */
+#adminSidebar {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+  #adminSidebar {
+    transform: translateX(-100%);
+    @apply fixed z-40 h-screen;
+  }
+
+  #adminSidebar.open {
+    transform: translateX(0);
+  }
+
+  #adminMainContent {
+    margin-left: 0 !important;
+  }
+}
+
+/* ===== HAMBURGER BUTTON ===== */
+.hamburger-btn {
+  @apply md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-borderMain text-textSub hover:bg-surface hover:text-textMain transition-all;
+}
+
+/* ===== OWNER HEADER - MOBILE ===== */
+@media (max-width: 640px) {
+  .owner-header-inner {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .owner-header-title h1 {
+    font-size: 1rem;
+  }
+}
+
+/* ===== FILTER ROW - STACK ON MOBILE ===== */
+.filter-row {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.tab-filter-group {
+  @apply flex flex-wrap items-center gap-2 bg-surface p-2 px-3 rounded-xl border border-borderMain;
+}
+
+/* ===== CHART CONTAINER - RESPONSIVE HEIGHT ===== */
+.chart-container {
+  width: 100%;
+  height: 350px;
+}
+
+@media (max-width: 640px) {
+  .chart-container {
+    height: 260px;
+  }
+}
+
+/* ===== PAGE HEADER - MOBILE STACK ===== */
+.page-header {
+  @apply flex flex-wrap justify-between items-start gap-3;
+}
+
+/* ===== KPI GRID RESPONSIVE ===== */
+.kpi-grid-5 {
+  @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4;
+}
+
+.kpi-grid-3 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
+}
+
+/* ===== TABLE: MIN WIDTH FOR READABILITY ON MOBILE ===== */
+.table-scroll {
+  @apply overflow-x-auto -mx-4 sm:mx-0;
+}
+
+.table-scroll table {
+  min-width: 600px;
+}
+
+/* ===== TAB ICON ONLY ON SMALL SCREENS ===== */
+@media (max-width: 480px) {
+  .tab-btn .tab-label {
+    display: none;
+  }
+
+  .tab-btn {
+    @apply px-4;
+  }
+}
+
+/* ===== MOBILE TOAST / NOTIFICATION ===== */
+.mobile-fab {
+  @apply fixed bottom-6 right-6 z-50 md:hidden;
 }

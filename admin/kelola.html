@@ -31,8 +31,11 @@
 </head>
 <body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
 
+  <!-- Mobile Overlay -->
+  <div id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
-  <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
+  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
       <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
         <i data-lucide="shield" class="w-6 h-6 text-white"></i>
@@ -74,8 +77,16 @@
     </div>
   </aside>
 
+  <!-- Mobile Top Bar -->
+  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+    <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+    <span class="text-base font-bold text-textMain">Admin Panel</span>
+  </div>
+
   <!-- Main Content -->
-  <main class="ml-64 flex-1 p-8">
+  <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-[1400px] mx-auto">
       
       <!-- Header -->
@@ -92,21 +103,15 @@
       </div>
 
       <!-- Filters -->
-      <div class="glass-panel p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3 w-full md:w-auto">
-          <div class="relative w-full md:w-80">
-            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchInput" placeholder="Cari No. PO, Pelanggan, Model..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all">
-          </div>
-          <select id="wilayahFilter" class="select select-bordered bg-bgMain/50 border-borderMain text-textMain rounded-xl text-sm h-[46px] min-h-[46px] px-4">
-            <option value="Semua">Semua Wilayah</option>
-            <!-- Injected dynamically -->
-          </select>
-        </div>
+      <div class="glass-panel p-3 sm:p-4 mb-6">
         <div class="flex items-center gap-3">
-           <button onclick="fetchData()" class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-4 h-[46px] min-h-[46px] font-medium transition-colors tooltip tooltip-bottom" data-tip="Muat Ulang Data">
-             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-           </button>
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="searchInput" placeholder="Cari No. PO, Pelanggan, Model, Wilayah, Kota..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all">
+          </div>
+          <button onclick="fetchData()" class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain/50 hover:text-textMain transition-colors" title="Muat Ulang Data">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
         </div>
       </div>
 
@@ -211,6 +216,15 @@
     requireAuth(['admin']);
     lucide.createIcons();
 
+    function openSidebar() {
+      document.getElementById('adminSidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('active');
+    }
+    function closeSidebar() {
+      document.getElementById('adminSidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
     let currentPage = 1;
     const perPage = 15;
     let searchTimer = null;
@@ -218,27 +232,14 @@
 
     const formatCurrency = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
 
-    async function loadWilayah() {
-      const res = await apiFetch('/transaksi/wilayah');
-      if (res && res.ok) {
-        const data = await res.json();
-        const select = document.getElementById('wilayahFilter');
-        data.forEach(w => {
-          if(w) select.innerHTML += `<option value="${w}">${w}</option>`;
-        });
-      }
-    }
-
     async function fetchData() {
       const tbody = document.getElementById('dataTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12"><span class="loading loading-spinner text-primary"></span></td></tr>';
 
       const search = document.getElementById('searchInput').value;
-      const wilayah = document.getElementById('wilayahFilter').value;
       
       let url = `/transaksi/?page=${currentPage}&per_page=${perPage}`;
       if (search) url += `&search=${encodeURIComponent(search)}`;
-      if (wilayah && wilayah !== 'Semua') url += `&wilayah=${encodeURIComponent(wilayah)}`;
 
       const res = await apiFetch(url);
       if (!res) {
@@ -268,9 +269,8 @@
             </td>
             <td class="px-4 py-4">
               <div class="font-medium">${t.nama_pelanggan}</div>
-              <div class="text-xs text-textSub flex items-center gap-1 mt-0.5">
-                <span class="px-1.5 py-0.5 rounded bg-surface border border-borderMain">${t.wilayah}</span> 
-                ${t.kota ? `· ${t.kota}` : ''}
+              <div class="text-xs text-textSub mt-0.5">
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-surface border border-borderMain">${t.wilayah}</span>${t.kota ? ` <span class="text-textMuted">·</span> ${t.kota}` : ''}
               </div>
             </td>
             <td class="px-4 py-4">
@@ -298,7 +298,6 @@
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
     });
-    document.getElementById('wilayahFilter').addEventListener('change', () => { currentPage = 1; fetchData(); });
     document.getElementById('btnPrev').addEventListener('click', () => { if(currentPage > 1) { currentPage--; fetchData(); } });
     document.getElementById('btnNext').addEventListener('click', () => { currentPage++; fetchData(); });
 
@@ -367,7 +366,6 @@
     });
 
     // Init
-    loadWilayah();
     fetchData();
   </script>
 </body>

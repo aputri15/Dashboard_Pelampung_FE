@@ -29,8 +29,11 @@
 </head>
 <body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
 
+  <!-- Mobile Overlay -->
+  <div id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <!-- Sidebar -->
-  <aside class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-20 shadow-xl">
+  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
       <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
         <i data-lucide="shield" class="w-6 h-6 text-white"></i>
@@ -69,17 +72,21 @@
     </div>
   </aside>
 
+  <!-- Mobile Top Bar -->
+  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+    <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+    <span class="text-base font-bold text-textMain">Admin Panel</span>
+  </div>
+
   <!-- Main Content -->
-  <main class="ml-64 flex-1 p-8">
+  <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-[1400px] mx-auto">
       
       <!-- Header Section -->
       <div class="mb-8">
-        <div class="flex items-center gap-2 text-primary text-sm font-medium mb-2">
-          <i data-lucide="shield" class="w-4 h-4"></i>
-          <span>Administrator Settings</span>
-        </div>
-        <h2 class="text-3xl font-bold text-textMain tracking-tight">Manajemen Pengguna</h2>
+        <h2 class="text-3xl font-bold text-textMain tracking-tight">Manajemen Akun</h2>
         <p class="text-textSub mt-1 mb-6">Kelola data administrator dan owner yang memiliki akses ke sistem analitik.</p>
         
         <button onclick="modal_tambah.showModal()" class="btn btn-primary bg-primary text-white border-transparent hover:bg-blue-600 shadow-lg shadow-primary/20 hover:shadow-primary/40 flex items-center gap-2 rounded-xl px-6 w-max">
@@ -89,25 +96,15 @@
       </div>
 
       <!-- Advanced Search & Filter Bar -->
-      <div class="glass-panel p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3 w-full md:w-auto">
-          <div class="relative w-full md:w-96">
-            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-            <input type="text" placeholder="Cari berdasarkan nama, username, atau email..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all focus:bg-surface">
-          </div>
-          <select class="select select-bordered bg-bgMain/50 border-borderMain text-textMain rounded-xl text-sm h-[46px] min-h-[46px] focus:ring-2 focus:ring-primary transition-all px-4">
-            <option>Semua Role</option>
-            <option>Administrator</option>
-            <option>Owner</option>
-          </select>
-        </div>
+      <div class="glass-panel p-3 sm:p-4 mb-6">
         <div class="flex items-center gap-3">
-           <button class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-5 h-[46px] min-h-[46px] font-medium transition-colors">
-             <i data-lucide="filter" class="w-4 h-4 mr-2"></i> Filter Lanjutan
-           </button>
-           <button onclick="loadUsers()" class="btn btn-ghost text-textSub hover:text-textMain hover:bg-bgMain/50 rounded-xl px-4 h-[46px] min-h-[46px] font-medium transition-colors tooltip tooltip-bottom" data-tip="Muat Ulang Data">
-             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-           </button>
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="searchAkun" placeholder="Cari nama, username, email, atau role..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all focus:bg-surface">
+          </div>
+          <button onclick="loadUsers()" class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain/50 hover:text-textMain transition-colors" title="Muat Ulang Data">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
         </div>
       </div>
 
@@ -360,6 +357,15 @@
     
     lucide.createIcons();
 
+    function openSidebar() {
+      document.getElementById('adminSidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('active');
+    }
+    function closeSidebar() {
+      document.getElementById('adminSidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
     let currentEditId = null;
     let currentDeleteId = null;
 
@@ -389,20 +395,21 @@
       }
 
       // Filter Logic
-      const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-      const roleFilter = roleSelect ? roleSelect.value : 'Semua Role';
+      const searchTerm = document.getElementById('searchAkun') ? document.getElementById('searchAkun').value.toLowerCase() : '';
 
       users = users.filter(u => {
-        const matchesSearch = !searchTerm || 
-          u.full_name.toLowerCase().includes(searchTerm) || 
+        if (!searchTerm) return true;
+
+        // If search matches a role keyword exactly, filter by role only
+        const roleKeywords = { 'owner': 'owner', 'admin': 'admin', 'administrator': 'admin' };
+        if (roleKeywords[searchTerm] !== undefined) {
+          return u.role === roleKeywords[searchTerm];
+        }
+
+        // Otherwise, general text search (name, username, email)
+        return u.full_name.toLowerCase().includes(searchTerm) || 
           u.username.toLowerCase().includes(searchTerm) || 
           u.email.toLowerCase().includes(searchTerm);
-          
-        let matchesRole = true;
-        if (roleFilter === 'Administrator') matchesRole = u.role === 'admin';
-        else if (roleFilter === 'Owner') matchesRole = u.role === 'owner';
-
-        return matchesSearch && matchesRole;
       });
 
       if (users.length === 0) {
@@ -452,16 +459,13 @@
       lucide.createIcons();
     }
 
-    // Add filter logic
-    const searchInput = document.querySelector('input[placeholder="Cari berdasarkan nama, username, atau email..."]');
-    const roleSelect = document.querySelector('.glass-panel select');
+    // Add search logic
+    const searchAkunEl = document.getElementById('searchAkun');
 
-    searchInput.addEventListener('input', () => {
+    searchAkunEl.addEventListener('input', () => {
       clearTimeout(window.searchTimer);
       window.searchTimer = setTimeout(loadUsers, 300);
     });
-
-    roleSelect.addEventListener('change', loadUsers);
 
     // ===== CREATE USER =====
     document.getElementById('btnCreateUser').addEventListener('click', async () => {
