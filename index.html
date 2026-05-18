@@ -1,100 +1,216 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<html lang="id" data-theme="light" class="bg-bgMain text-textMain">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - BI Pelampung</title>
-  <!-- Tailwind via script for dev without node, but standard build uses style.css -->
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Fallback Tailwind CSS script so it renders if user just opens the file -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            bgMain: '#0F172A',
-            surface: '#1E293B',
-            borderMain: '#334155',
-            textMain: '#F1F5F9',
-            textSub: '#CBD5E1',
-            textMuted: '#64748B',
-            primary: '#3B82F6',
+            bgMain: '#F8FAFC',
+            surface: '#FFFFFF',
+            borderMain: '#E2E8F0',
+            textMain: '#1E293B',
+            textSub: '#475569',
+            textMuted: '#94A3B8',
+            primary: '#4A90D9',
+            danger: '#EF4444',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
           }
         }
       }
     }
   </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .login-brand-bg {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2563a8 40%, #4A90D9 100%);
+    }
+    .float-card {
+      animation: floatY 5s ease-in-out infinite;
+    }
+    .float-card-2 {
+      animation: floatY 6s ease-in-out infinite reverse;
+    }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .input-login {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 0.75rem;
+      font-size: 0.9rem;
+      color: #1E293B;
+      background: #F8FAFC;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-login:focus {
+      border-color: #4A90D9;
+      box-shadow: 0 0 0 3px rgba(74,144,217,0.12);
+      background: #fff;
+    }
+    .btn-login {
+      width: 100%;
+      padding: 0.8rem;
+      background: linear-gradient(135deg, #2563a8, #4A90D9);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(74,144,217,0.35);
+    }
+    .btn-login:hover { filter: brightness(1.07); transform: translateY(-1px); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+  </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-bgMain relative overflow-hidden">
-  
-  <!-- Ambient background glow for advanced look -->
-  <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
-  <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+<body class="min-h-screen flex" style="font-family:'Inter',sans-serif;">
 
-  <div class="w-full max-w-md p-8 relative z-10">
-    <div class="bg-surface/80 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-borderMain">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-indigo-600 rounded-2xl mb-4 shadow-lg shadow-primary/30">
-          <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+  <!-- ===== LEFT PANEL: Branding ===== -->
+  <div class="hidden md:flex w-1/2 login-brand-bg relative overflow-hidden flex-col justify-between p-12 text-white">
+    <!-- Decorative circles -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white/5"></div>
+    <div class="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-white/5 translate-x-1/3 translate-y-1/3"></div>
+    <div class="absolute top-1/3 -right-12 w-48 h-48 rounded-full bg-white/10"></div>
+
+    <!-- Logo -->
+    <div class="relative z-10">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style="background-color:#4A90D9;">
+          <!-- Analytics combo chart icon: bars + line with dots -->
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Bar columns -->
+            <rect x="2" y="14" width="4.5" height="8" rx="1" fill="white"/>
+            <rect x="9.75" y="9" width="4.5" height="13" rx="1" fill="white"/>
+            <rect x="17.5" y="11.5" width="4" height="10.5" rx="1" fill="white"/>
+            <!-- Connecting line -->
+            <polyline points="4.25,12.5 12,6.5 19.5,9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Dots at data points -->
+            <circle cx="4.25" cy="12.5" r="2" fill="white"/>
+            <circle cx="12" cy="6.5" r="2" fill="white"/>
+            <circle cx="19.5" cy="9.5" r="2" fill="white"/>
+          </svg>
         </div>
-        <h1 class="text-3xl font-bold text-textMain mb-2">BI Pelampung</h1>
-        <p class="text-textSub text-sm">Masuk untuk mengakses dashboard analitik</p>
+        <span class="text-xl font-bold tracking-tight">BI Pelampung</span>
+      </div>
+      <p class="text-blue-200 text-sm">Business Intelligence Dashboard</p>
+    </div>
+
+    <!-- Center content -->
+    <div class="relative z-10 space-y-6">
+      <h2 class="text-4xl font-extrabold leading-tight">
+        Insight Data<br>
+        <span class="text-blue-200">Lebih Cepat.</span>
+      </h2>
+      <p class="text-blue-100 text-base leading-relaxed max-w-xs">
+        Platform analitik logistik terintegrasi untuk membantu pengambilan keputusan bisnis berbasis data.
+      </p>
+
+
+    </div>
+
+    <!-- Footer -->
+    <div class="relative z-10 text-blue-300 text-xs">
+      &copy; 2025 BI Pelampung · Sistem Analitik Logistik
+    </div>
+  </div>
+
+  <!-- ===== RIGHT PANEL: Form Login ===== -->
+  <div class="flex-1 flex items-center justify-center bg-bgMain p-6 md:p-12">
+    <div class="w-full max-w-sm">
+
+      <!-- Mobile logo -->
+      <div class="md:hidden flex items-center gap-2 mb-8">
+        <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="14" width="4.5" height="8" rx="1" fill="white" opacity="0.9"/>
+            <rect x="9.75" y="9" width="4.5" height="13" rx="1" fill="white" opacity="0.9"/>
+            <rect x="17.5" y="11.5" width="4" height="10.5" rx="1" fill="white" opacity="0.9"/>
+            <polyline points="4.25,12.5 12,6.5 19.5,9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="4.25" cy="12.5" r="2" fill="white"/>
+            <circle cx="12" cy="6.5" r="2" fill="white"/>
+            <circle cx="19.5" cy="9.5" r="2" fill="white"/>
+          </svg>
+        </div>
+        <span class="text-lg font-bold text-textMain">BI Pelampung</span>
       </div>
 
+      <h1 class="text-2xl font-extrabold text-textMain mb-1">Selamat Datang</h1>
+      <p class="text-textSub text-sm mb-8">Masuk untuk mengakses dashboard analitik</p>
+
       <form id="loginForm" class="space-y-5">
+        <!-- Username -->
         <div>
-          <label class="block text-sm mb-2 text-textSub font-medium">Username</label>
+          <label class="block text-sm mb-1.5 text-textSub font-medium">Username</label>
           <div class="relative">
-            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-textMuted"></i>
-            <input type="text" id="username" class="w-full pl-11 pr-4 py-3 bg-[#0F172A]/50 border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted" placeholder="Masukkan username" required>
+            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-textMuted" style="width:18px;height:18px;left:12px;"></i>
+            <input type="text" id="username" class="input-login" placeholder="Masukkan username" required>
           </div>
         </div>
 
+        <!-- Password -->
         <div>
-          <label class="block text-sm mb-2 text-textSub font-medium">Password</label>
+          <label class="block text-sm mb-1.5 text-textSub font-medium">Password</label>
           <div class="relative">
-            <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-textMuted"></i>
-            <input type="password" id="password" class="w-full pl-11 pr-12 py-3 bg-[#0F172A]/50 border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted" placeholder="Masukkan password" required>
-            <button type="button" id="togglePassword" aria-label="Tampilkan password" class="absolute right-3 top-1/2 -translate-y-1/2 text-textMuted hover:text-textMain transition-colors focus:outline-none" onclick="togglePasswordVisibility()">
-              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <!-- eye-off: password tersembunyi -->
+            <i data-lucide="lock" class="absolute top-1/2 -translate-y-1/2 text-textMuted" style="width:18px;height:18px;left:12px;"></i>
+            <input type="password" id="password" class="input-login" style="padding-right:3rem;" placeholder="Masukkan password" required>
+            <button type="button" id="togglePassword" aria-label="Tampilkan password"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-textMuted hover:text-textMain transition-colors focus:outline-none"
+              onclick="togglePasswordVisibility()">
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
           </div>
         </div>
 
-        <div id="errorMsg" class="hidden bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+        <!-- Error -->
+        <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
           <i data-lucide="alert-circle" class="w-4 h-4"></i>
           <span>Username atau password salah</span>
         </div>
 
-        <button type="submit" class="w-full bg-gradient-to-r from-primary to-indigo-600 text-white py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 font-medium">
-          <i data-lucide="log-in" class="w-5 h-5"></i>
-          Login
+        <!-- Submit -->
+        <button type="submit" class="btn-login">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          Masuk ke Dashboard
         </button>
       </form>
 
-      <div class="mt-6 p-4 bg-[#0F172A]/50 rounded-xl border border-borderMain/50">
+      <!-- Demo credentials -->
+      <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-borderMain">
         <p class="text-xs text-textMuted mb-2 font-medium">Demo credentials:</p>
         <div class="text-xs text-textSub space-y-1">
-          <div class="flex justify-between"><span class="font-medium text-textMain">Admin:</span> <span>admin / adminpassword</span></div>
-          <div class="flex justify-between"><span class="font-medium text-textMain">Owner:</span> <span>owner / ownerpassword</span></div>
+          <div class="flex justify-between"><span class="font-semibold text-textMain">Admin:</span> <span>admin / adminpassword</span></div>
+          <div class="flex justify-between"><span class="font-semibold text-textMain">Owner:</span> <span>owner / ownerpassword</span></div>
         </div>
       </div>
+
     </div>
   </div>
 
   <script>
     const API_BASE = 'http://127.0.0.1:8000/api/v1';
-    
     lucide.createIcons();
 
-    // Toggle show/hide password
-    // State: password tersembunyi (type=password) → icon eye (mata terbuka) → klik untuk lihat
-    //        password terlihat (type=text) → icon eye-off (mata tertutup) → klik untuk sembunyi
     const EYE_OPEN = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
     const EYE_CLOSED = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
 
@@ -102,16 +218,10 @@
       const passInput = document.getElementById('password');
       const eyeSvg = document.getElementById('eyeIcon');
       const isHidden = passInput.type === 'password';
-
-      // Ubah type input
       passInput.type = isHidden ? 'text' : 'password';
-
-      // Ubah isi SVG: jika password terlihat (text) → tampilkan eye (mata terbuka)
-      // jika password tersembunyi (password) → tampilkan eye-off (mata tertutup/dicoret)
       eyeSvg.innerHTML = isHidden ? EYE_OPEN : EYE_CLOSED;
     }
 
-    // If already logged in, redirect
     if (localStorage.getItem('access_token')) {
       const role = localStorage.getItem('user_role');
       if (role === 'admin') window.location.href = './admin/upload.html';
@@ -128,14 +238,13 @@
 
       errorMsg.classList.add('hidden');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> <span>Memproses...</span>';
+      submitBtn.innerHTML = '<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> <span>Memproses...</span>';
 
       try {
-        // Login via API
         const formData = new URLSearchParams();
         formData.append('username', user);
         formData.append('password', pass);
-        
+
         const loginRes = await fetch(`${API_BASE}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -148,21 +257,17 @@
         }
 
         const tokens = await loginRes.json();
-        
-        // Get user profile
         const meRes = await fetch(`${API_BASE}/auth/me`, {
           headers: { 'Authorization': `Bearer ${tokens.access_token}` }
         });
         const profile = await meRes.json();
 
-        // Store auth data
         localStorage.setItem('access_token', tokens.access_token);
         localStorage.setItem('refresh_token', tokens.refresh_token);
         localStorage.setItem('user_role', profile.role);
         localStorage.setItem('user_name', profile.full_name);
         localStorage.setItem('user_id', profile.id);
 
-        // Redirect by role (RBAC)
         if (profile.role === 'admin') {
           window.location.href = './admin/upload.html';
         } else if (profile.role === 'owner') {
@@ -174,7 +279,7 @@
         errorMsg.classList.remove('hidden');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i data-lucide="log-in" class="w-5 h-5"></i> Login';
+        submitBtn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Masuk ke Dashboard';
         lucide.createIcons();
       }
     });

@@ -9,13 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgMain: '#0F172A',
-        surface: '#1E293B',
-        borderMain: '#334155',
-        textMain: '#F1F5F9',
-        textSub: '#CBD5E1',
-        textMuted: '#64748B',
-        primary: '#3B82F6',
+        // Light mode base
+        bgMain: '#F8FAFC',
+        surface: '#FFFFFF',
+        borderMain: '#E2E8F0',
+        textMain: '#1E293B',
+        textSub: '#475569',
+        textMuted: '#94A3B8',
+        // Per-page accent colors (Admin)
+        accentUpload: '#4A90D9',   // Blue Sapphire - Upload Data
+        accentKelola: '#2BAE8E',   // Teal Green   - Kelola Data
+        accentLog: '#F5821F',      // Warm Orange  - Log Upload
+        accentAkun: '#E91E63',     // Hot Pink     - Manajemen Akun
+        // Semantic
+        primary: '#4A90D9',
         success: '#22C55E',
         warning: '#F59E0B',
         danger: '#EF4444',
@@ -24,6 +31,6 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["light", "dark"],
+    themes: ["light"],
   },
 }

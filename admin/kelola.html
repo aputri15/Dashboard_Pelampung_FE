@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<html lang="id" data-theme="light" class="bg-bgMain text-textMain">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Kelola Data | BI Pelampung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,64 +16,68 @@
       theme: {
         extend: {
           colors: {
-            bgMain: '#0F172A',
-            surface: '#1E293B',
-            borderMain: '#334155',
-            textMain: '#F1F5F9',
-            textSub: '#CBD5E1',
-            textMuted: '#64748B',
-            primary: '#3B82F6',
+            bgMain: '#F8FAFC',
+            surface: '#FFFFFF',
+            borderMain: '#E2E8F0',
+            textMain: '#1E293B',
+            textSub: '#475569',
+            textMuted: '#94A3B8',
+            primary: '#2BAE8E',
             success: '#22C55E',
             warning: '#F59E0B',
             danger: '#EF4444',
-          }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
       }
     }
   </script>
 </head>
-<body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
+
+<body class="min-h-screen flex bg-bgMain font-sans" style="font-family:'Inter',sans-serif;">
 
   <!-- Mobile Overlay -->
   <div id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
+  <aside id="adminSidebar"
+    class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-sm">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
-      <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+      <div class="w-10 h-10 bg-[#2BAE8E] rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="shield" class="w-5 h-5 text-white"></i>
       </div>
       <div>
-        <h1 class="text-lg font-bold text-textMain tracking-tight">Admin Panel</h1>
-        <p class="text-xs text-textSub">BI Pelampung</p>
+        <h1 class="text-base font-bold text-textMain tracking-tight">Admin Panel</h1>
+        <p class="text-xs text-textMuted">BI Pelampung</p>
       </div>
     </div>
-    
-    <nav class="flex-1 p-4 space-y-2">
-      <a href="upload.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="upload-cloud" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Upload Data</span>
+
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="upload.html"
+        class="sidebar-link sidebar-link-upload flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+        <span>Upload Data</span>
       </a>
-      <a href="kelola.html" class="sidebar-link active relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="database" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Kelola Data</span>
+      <a href="kelola.html"
+        class="sidebar-link sidebar-link-kelola active flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium">
+        <i data-lucide="database" class="w-5 h-5"></i>
+        <span>Kelola Data</span>
       </a>
-      <a href="log.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="history" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Log Upload</span>
+      <a href="log.html"
+        class="sidebar-link sidebar-link-log flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="history" class="w-5 h-5"></i>
+        <span>Riwayat Log Upload</span>
       </a>
-      <a href="akun.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="users" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Manajemen Akun</span>
+      <a href="akun.html"
+        class="sidebar-link sidebar-link-akun flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        <span>Manajemen Akun</span>
       </a>
     </nav>
-    
+
     <div class="p-4 border-t border-borderMain">
-      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
+      <button type="button" onclick="logout()"
+        class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-red-50 hover:text-danger rounded-xl transition-all border border-transparent hover:border-red-200 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -78,7 +85,8 @@
   </aside>
 
   <!-- Mobile Top Bar -->
-  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+  <div
+    class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3 shadow-sm">
     <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
       <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
@@ -88,15 +96,16 @@
   <!-- Main Content -->
   <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-[1400px] mx-auto">
-      
+
       <!-- Header -->
       <div class="flex justify-between items-end mb-6">
         <div>
-          <h2 class="text-3xl font-bold text-textMain tracking-tight">Kelola Data Transaksi</h2>
+          <h2 class="text-2xl font-bold text-textMain tracking-tight">Kelola Data Transaksi</h2>
           <p class="text-textSub mt-1">Lihat, cari, edit, dan hapus data transaksi yang ada di database.</p>
         </div>
         <div>
-          <button onclick="confirmDeleteAll()" class="btn btn-ghost hover:bg-danger/10 text-danger border border-danger/20 rounded-xl px-4 flex items-center gap-2 h-[46px]">
+          <button onclick="confirmDeleteAll()"
+            class="flex items-center gap-2 px-4 py-2.5 text-danger border border-red-200 hover:bg-red-50 rounded-xl transition-all font-medium text-sm">
             <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua Data
           </button>
         </div>
@@ -107,9 +116,12 @@
         <div class="flex items-center gap-3">
           <div class="relative flex-1">
             <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchInput" placeholder="Cari No. PO, Pelanggan, Model, Wilayah, Kota..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all">
+            <input type="text" id="searchInput" placeholder="Cari No PO, Pelanggan, Produk..."
+              class="w-full pl-12 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-[#2BAE8E] focus:outline-none transition-all">
           </div>
-          <button onclick="fetchData()" class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain/50 hover:text-textMain transition-colors" title="Muat Ulang Data">
+          <button onclick="fetchData()"
+            class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-colors"
+            title="Muat Ulang Data">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
           </button>
         </div>
@@ -119,30 +131,38 @@
       <div class="glass-panel overflow-hidden">
         <div class="overflow-x-auto">
           <table class="table w-full text-sm">
-            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+            <thead class="bg-bgMain text-textSub border-b border-borderMain">
               <tr>
-                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">No. PO & Tanggal</th>
-                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">Pelanggan & Lokasi</th>
-                <th class="py-5 px-4 uppercase tracking-wider text-xs font-semibold">Produk</th>
-                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Qty</th>
-                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Harga Satuan</th>
-                <th class="py-5 px-4 text-right uppercase tracking-wider text-xs font-semibold">Total</th>
-                <th class="py-5 px-4 text-center uppercase tracking-wider text-xs font-semibold">Aksi</th>
+                <th class="py-4 px-4 uppercase tracking-wider text-xs font-semibold text-textMuted">No. PO & Tanggal
+                </th>
+                <th class="py-4 px-4 uppercase tracking-wider text-xs font-semibold text-textMuted">Pelanggan & Lokasi
+                </th>
+                <th class="py-4 px-4 uppercase tracking-wider text-xs font-semibold text-textMuted">Produk</th>
+                <th class="py-4 px-4 text-right uppercase tracking-wider text-xs font-semibold text-textMuted">Qty</th>
+                <th class="py-4 px-4 text-right uppercase tracking-wider text-xs font-semibold text-textMuted">Harga
+                  Satuan</th>
+                <th class="py-4 px-4 text-right uppercase tracking-wider text-xs font-semibold text-textMuted">Total
+                </th>
+                <th class="py-4 px-4 text-center uppercase tracking-wider text-xs font-semibold text-textMuted">Aksi
+                </th>
               </tr>
             </thead>
-            <tbody id="dataTableBody" class="text-textMain divide-y divide-borderMain/50">
+            <tbody id="dataTableBody" class="text-textMain divide-y divide-borderMain">
               <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
-        
+
         <!-- Pagination -->
-        <div class="p-5 border-t border-borderMain/50 flex items-center justify-between text-sm text-textSub bg-surface/50">
+        <div class="p-5 border-t border-borderMain flex items-center justify-between text-sm text-textSub bg-bgMain/50">
           <div id="paginationInfo">Menampilkan 0 data</div>
           <div class="flex gap-1">
-            <button id="btnPrev" class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Sebelumnya</button>
-            <span id="pageIndicator" class="btn btn-sm bg-primary border-transparent text-white pointer-events-none px-4">1</span>
-            <button id="btnNext" class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Selanjutnya</button>
+            <button id="btnPrev"
+              class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Sebelumnya</button>
+            <span id="pageIndicator"
+              class="px-4 py-1.5 rounded-lg bg-[#2BAE8E] text-white text-sm font-bold pointer-events-none">1</span>
+            <button id="btnNext"
+              class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Selanjutnya</button>
           </div>
         </div>
       </div>
@@ -155,7 +175,8 @@
     <div class="modal-box glass-panel p-0 max-w-2xl overflow-hidden relative">
       <div class="p-8 relative z-10">
         <div class="flex items-center gap-3 mb-6">
-          <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
+          <div
+            class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
             <i data-lucide="edit-3" class="w-6 h-6"></i>
           </div>
           <div>
@@ -168,43 +189,53 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Nomor PO</label>
-              <input type="text" id="edit_no_po" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" disabled>
+              <input type="text" id="edit_no_po"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" disabled>
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Tanggal</label>
-              <input type="text" id="edit_tanggal" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="text" id="edit_tanggal"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Pelanggan</label>
-              <input type="text" id="edit_pelanggan" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="text" id="edit_pelanggan"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Wilayah</label>
-              <input type="text" id="edit_wilayah" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="text" id="edit_wilayah"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Kota</label>
-              <input type="text" id="edit_kota" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="text" id="edit_kota"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Produk</label>
-              <input type="text" id="edit_produk" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="text" id="edit_produk"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Qty</label>
-              <input type="number" id="edit_qty" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="number" id="edit_qty"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
             <div>
               <label class="text-xs font-medium text-textSub mb-1 block">Harga Satuan</label>
-              <input type="number" id="edit_harga" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
+              <input type="number" id="edit_harga"
+                class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm">
             </div>
           </div>
         </form>
       </div>
-      
+
       <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
-        <button onclick="modal_edit.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-        <button id="btnSaveEdit" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl">Simpan</button>
+        <button onclick="modal_edit.close()"
+          class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnSaveEdit"
+          class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl">Simpan</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -237,7 +268,7 @@
       tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12"><span class="loading loading-spinner text-primary"></span></td></tr>';
 
       const search = document.getElementById('searchInput').value;
-      
+
       let url = `/transaksi/?page=${currentPage}&per_page=${perPage}`;
       if (search) url += `&search=${encodeURIComponent(search)}`;
 
@@ -249,9 +280,9 @@
 
       const { data, total, page } = await res.json();
 
-      document.getElementById('paginationInfo').innerHTML = `Menampilkan <span class="text-textMain font-medium">${data.length > 0 ? (page-1)*perPage + 1 : 0}-${(page-1)*perPage + data.length}</span> dari <span class="text-textMain font-medium">${total}</span> data`;
+      document.getElementById('paginationInfo').innerHTML = `Menampilkan <span class="text-textMain font-medium">${data.length > 0 ? (page - 1) * perPage + 1 : 0}-${(page - 1) * perPage + data.length}</span> dari <span class="text-textMain font-medium">${total}</span> data`;
       document.getElementById('pageIndicator').textContent = page;
-      
+
       document.getElementById('btnPrev').disabled = page <= 1;
       document.getElementById('btnNext').disabled = page * perPage >= total;
 
@@ -289,7 +320,7 @@
           </tr>
         `;
       }).join('');
-      
+
       lucide.createIcons();
     }
 
@@ -298,21 +329,21 @@
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
     });
-    document.getElementById('btnPrev').addEventListener('click', () => { if(currentPage > 1) { currentPage--; fetchData(); } });
+    document.getElementById('btnPrev').addEventListener('click', () => { if (currentPage > 1) { currentPage--; fetchData(); } });
     document.getElementById('btnNext').addEventListener('click', () => { currentPage++; fetchData(); });
 
     // Actions
     async function deleteRow(id) {
-      if(!confirm("Yakin ingin menghapus data ini?")) return;
+      if (!confirm("Yakin ingin menghapus data ini?")) return;
       const res = await apiFetch(`/transaksi/${id}`, { method: 'DELETE' });
-      if(res && res.ok) fetchData();
+      if (res && res.ok) fetchData();
       else alert('Gagal menghapus data');
     }
 
     async function confirmDeleteAll() {
-      if(!confirm("PERINGATAN: Anda akan menghapus SEMUA data transaksi. Tindakan ini tidak dapat dibatalkan. Lanjutkan?")) return;
+      if (!confirm("PERINGATAN: Anda akan menghapus SEMUA data transaksi. Tindakan ini tidak dapat dibatalkan. Lanjutkan?")) return;
       const res = await apiFetch(`/transaksi/`, { method: 'DELETE' });
-      if(res && res.ok) {
+      if (res && res.ok) {
         alert('Semua data transaksi berhasil dihapus.');
         currentPage = 1;
         fetchData();
@@ -335,8 +366,8 @@
     }
 
     document.getElementById('btnSaveEdit').addEventListener('click', async () => {
-      if(!currentEditId) return;
-      
+      if (!currentEditId) return;
+
       const qty = parseInt(document.getElementById('edit_qty').value) || 0;
       const harga = parseFloat(document.getElementById('edit_harga').value) || 0;
 
@@ -357,7 +388,7 @@
         body: JSON.stringify(body)
       });
 
-      if(res && res.ok) {
+      if (res && res.ok) {
         modal_edit.close();
         fetchData();
       } else {
@@ -369,4 +400,5 @@
     fetchData();
   </script>
 </body>
+
 </html>

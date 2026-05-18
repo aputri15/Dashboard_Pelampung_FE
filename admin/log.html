@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<html lang="id" data-theme="light" class="bg-bgMain text-textMain">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Log Upload | BI Pelampung</title>
+  <title>Admin - Riwayat Log Upload | BI Pelampung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,63 +16,67 @@
       theme: {
         extend: {
           colors: {
-            bgMain: '#0F172A',
-            surface: '#1E293B',
-            borderMain: '#334155',
-            textMain: '#F1F5F9',
-            textSub: '#CBD5E1',
-            textMuted: '#64748B',
-            primary: '#3B82F6',
+            bgMain: '#F8FAFC',
+            surface: '#FFFFFF',
+            borderMain: '#E2E8F0',
+            textMain: '#1E293B',
+            textSub: '#475569',
+            textMuted: '#94A3B8',
+            primary: '#F5821F',
             success: '#22C55E',
             danger: '#EF4444',
-          }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
       }
     }
   </script>
 </head>
-<body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
+
+<body class="min-h-screen flex bg-bgMain font-sans" style="font-family:'Inter',sans-serif;">
 
   <!-- Mobile Overlay -->
   <div id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
+  <aside id="adminSidebar"
+    class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-sm">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
-      <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+      <div class="w-10 h-10 bg-[#F5821F] rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="shield" class="w-5 h-5 text-white"></i>
       </div>
       <div>
-        <h1 class="text-lg font-bold text-textMain tracking-tight">Admin Panel</h1>
-        <p class="text-xs text-textSub">BI Pelampung</p>
+        <h1 class="text-base font-bold text-textMain tracking-tight">Admin Panel</h1>
+        <p class="text-xs text-textMuted">BI Pelampung</p>
       </div>
     </div>
-    
-    <nav class="flex-1 p-4 space-y-2">
-      <a href="upload.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="upload-cloud" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Upload Data</span>
+
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="upload.html"
+        class="sidebar-link sidebar-link-upload flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+        <span>Upload Data</span>
       </a>
-      <a href="kelola.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="database" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Kelola Data</span>
+      <a href="kelola.html"
+        class="sidebar-link sidebar-link-kelola flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="database" class="w-5 h-5"></i>
+        <span>Kelola Data</span>
       </a>
-      <a href="log.html" class="sidebar-link active relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="history" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Log Upload</span>
+      <a href="log.html"
+        class="sidebar-link sidebar-link-log active flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium">
+        <i data-lucide="history" class="w-5 h-5"></i>
+        <span>Riwayat Log Upload</span>
       </a>
-      <a href="akun.html" class="sidebar-link relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-        <i data-lucide="users" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Manajemen Akun</span>
+      <a href="akun.html"
+        class="sidebar-link sidebar-link-akun flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        <span>Manajemen Akun</span>
       </a>
     </nav>
-    
+
     <div class="p-4 border-t border-borderMain">
-      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
+      <button type="button" onclick="logout()"
+        class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-red-50 hover:text-danger rounded-xl transition-all border border-transparent hover:border-red-200 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -77,7 +84,8 @@
   </aside>
 
   <!-- Mobile Top Bar -->
-  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+  <div
+    class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3 shadow-sm">
     <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
       <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
@@ -87,13 +95,14 @@
   <!-- Main Content -->
   <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-[1200px] mx-auto">
-      
+
       <div class="mb-8 flex justify-between items-center">
         <div>
-          <h2 class="text-3xl font-bold text-textMain tracking-tight">Riwayat Log Upload</h2>
+          <h2 class="text-2xl font-bold text-textMain tracking-tight">Riwayat Log Upload</h2>
           <p class="text-textSub mt-1">Lacak history perubahan dan upload data oleh sistem.</p>
         </div>
-        <button onclick="loadLogs()" class="btn btn-ghost hover:bg-surface text-textSub hover:text-textMain rounded-xl px-4 flex items-center gap-2">
+        <button onclick="loadLogs()"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-all text-sm font-medium">
           <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Ulang
         </button>
       </div>
@@ -102,7 +111,7 @@
       <div class="glass-panel overflow-hidden">
         <div class="overflow-x-auto">
           <table class="table w-full text-sm">
-            <thead class="bg-bgMain/50 text-textSub border-b border-borderMain">
+            <thead class="bg-bgMain text-textMuted border-b border-borderMain">
               <tr>
                 <th class="py-4 px-6 uppercase tracking-wider text-xs font-semibold">No.</th>
                 <th class="py-4 px-6 uppercase tracking-wider text-xs font-semibold">Tanggal Upload</th>
@@ -139,15 +148,15 @@
     async function loadLogs() {
       const tbody = document.getElementById('logsTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8"><span class="loading loading-spinner text-primary"></span></td></tr>';
-      
+
       const res = await apiFetch('/transaksi/log/uploads');
       if (!res) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-danger">Gagal memuat data.</td></tr>';
         return;
       }
-      
+
       const logs = await res.json();
-      
+
       if (logs.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-textMuted">Belum ada history upload.</td></tr>';
         return;
@@ -183,12 +192,12 @@
           </tr>
         `;
       }).join('');
-      
+
       lucide.createIcons();
     }
 
     async function deleteLog(id) {
-      if(!confirm('Hapus log ini?')) return;
+      if (!confirm('Hapus log ini?')) return;
       const res = await apiFetch(`/transaksi/log/uploads/${id}`, { method: 'DELETE' });
       if (res && res.ok) {
         loadLogs();
@@ -201,4 +210,5 @@
     loadLogs();
   </script>
 </body>
+
 </html>

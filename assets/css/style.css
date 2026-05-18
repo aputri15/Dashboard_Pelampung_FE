@@ -8,39 +8,78 @@
   }
 }
 
+/* ===== GLASS / CARD PANEL ===== */
 .glass-panel {
-  @apply bg-surface/80 backdrop-blur-md border border-borderMain rounded-2xl shadow-xl;
+  @apply bg-surface border border-borderMain rounded-2xl shadow-sm;
 }
 
+/* ===== INPUT FIELD ===== */
 .input-field {
   @apply w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-textMain placeholder:text-textMuted;
 }
 
+/* ===== PRIMARY BUTTON ===== */
 .btn-primary {
-  @apply w-full bg-primary text-white py-3 rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 font-medium;
+  @apply w-full bg-primary text-white py-3 rounded-xl hover:brightness-95 transition-all shadow-md flex items-center justify-center gap-2 font-medium;
 }
 
-/* ===== SIDEBAR (Desktop) ===== */
+/* ===== SIDEBAR LINKS (Default - no active color) ===== */
 .sidebar-link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-textSub hover:bg-surface hover:text-textMain transition-all;
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-textSub hover:bg-bgMain hover:text-textMain transition-all font-medium;
 }
 
-.sidebar-link.active {
-  @apply bg-primary/10 text-primary font-medium;
+/* --- Upload Data (Blue) --- */
+.sidebar-link-upload.active {
+  @apply bg-blue-50 text-[#4A90D9] font-semibold;
+  border-left: 3px solid #4A90D9;
+}
+
+.sidebar-link-upload:hover {
+  @apply bg-blue-50 text-[#4A90D9];
+}
+
+/* --- Kelola Data (Teal) --- */
+.sidebar-link-kelola.active {
+  @apply bg-emerald-50 text-[#2BAE8E] font-semibold;
+  border-left: 3px solid #2BAE8E;
+}
+
+.sidebar-link-kelola:hover {
+  @apply bg-emerald-50 text-[#2BAE8E];
+}
+
+/* --- Log Upload (Orange) --- */
+.sidebar-link-log.active {
+  @apply bg-orange-50 text-[#F5821F] font-semibold;
+  border-left: 3px solid #F5821F;
+}
+
+.sidebar-link-log:hover {
+  @apply bg-orange-50 text-[#F5821F];
+}
+
+/* --- Manajemen Akun (Pink) --- */
+.sidebar-link-akun.active {
+  @apply bg-pink-50 text-[#E91E63] font-semibold;
+  border-left: 3px solid #E91E63;
+}
+
+.sidebar-link-akun:hover {
+  @apply bg-pink-50 text-[#E91E63];
 }
 
 /* ===== TAB NAVIGATION ===== */
 .tab-btn {
-  @apply flex items-center gap-2 px-4 py-3 whitespace-nowrap relative transition-all text-textMuted hover:text-textMain hover:bg-surface rounded-t-lg text-sm;
+  @apply flex items-center gap-2 px-4 py-3 whitespace-nowrap relative transition-all text-textMuted hover:text-textMain hover:bg-bgMain rounded-t-lg text-sm;
 }
 
 .tab-btn.active {
-  @apply text-primary font-medium bg-surface border-b-2 border-primary;
+  @apply text-primary font-medium bg-bgMain border-b-2 border-primary;
 }
 
 /* ===== MOBILE SIDEBAR OVERLAY ===== */
 #sidebarOverlay {
-  @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden;
+  @apply fixed inset-0 bg-black/40 backdrop-blur-sm z-30 hidden;
   transition: opacity 0.25s ease;
 }
 
@@ -70,7 +109,7 @@
 
 /* ===== HAMBURGER BUTTON ===== */
 .hamburger-btn {
-  @apply md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-borderMain text-textSub hover:bg-surface hover:text-textMain transition-all;
+  @apply md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-all;
 }
 
 /* ===== OWNER HEADER - MOBILE ===== */
@@ -85,16 +124,16 @@
   }
 }
 
-/* ===== FILTER ROW - STACK ON MOBILE ===== */
+/* ===== FILTER ROW ===== */
 .filter-row {
   @apply flex flex-wrap items-center gap-2;
 }
 
 .tab-filter-group {
-  @apply flex flex-wrap items-center gap-2 bg-surface p-2 px-3 rounded-xl border border-borderMain;
+  @apply flex flex-wrap items-center gap-2 bg-bgMain p-2 px-3 rounded-xl border border-borderMain;
 }
 
-/* ===== CHART CONTAINER - RESPONSIVE HEIGHT ===== */
+/* ===== CHART CONTAINER ===== */
 .chart-container {
   width: 100%;
   height: 350px;
@@ -106,12 +145,12 @@
   }
 }
 
-/* ===== PAGE HEADER - MOBILE STACK ===== */
+/* ===== PAGE HEADER ===== */
 .page-header {
   @apply flex flex-wrap justify-between items-start gap-3;
 }
 
-/* ===== KPI GRID RESPONSIVE ===== */
+/* ===== KPI GRID ===== */
 .kpi-grid-5 {
   @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4;
 }
@@ -120,7 +159,7 @@
   @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
 }
 
-/* ===== TABLE: MIN WIDTH FOR READABILITY ON MOBILE ===== */
+/* ===== TABLE SCROLL ===== */
 .table-scroll {
   @apply overflow-x-auto -mx-4 sm:mx-0;
 }
@@ -140,7 +179,7 @@
   }
 }
 
-/* ===== MOBILE TOAST / NOTIFICATION ===== */
+/* ===== MOBILE FAB ===== */
 .mobile-fab {
   @apply fixed bottom-6 right-6 z-50 md:hidden;
 }

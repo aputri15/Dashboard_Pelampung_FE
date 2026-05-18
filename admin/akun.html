@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark" class="bg-bgMain text-textMain">
+<html lang="id" data-theme="light" class="bg-bgMain text-textMain">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Manajemen Akun | BI Pelampung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
   <script src="../assets/js/api.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,59 +16,66 @@
       theme: {
         extend: {
           colors: {
-            bgMain: '#0F172A',
-            surface: '#1E293B',
-            borderMain: '#334155',
-            textMain: '#F1F5F9',
-            textSub: '#CBD5E1',
-            textMuted: '#64748B',
-            primary: '#3B82F6',
+            bgMain: '#F8FAFC',
+            surface: '#FFFFFF',
+            borderMain: '#E2E8F0',
+            textMain: '#1E293B',
+            textSub: '#475569',
+            textMuted: '#94A3B8',
+            primary: '#E91E63',
             danger: '#EF4444',
-          }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
       }
     }
   </script>
 </head>
-<body class="min-h-screen flex bg-bgMain font-sans selection:bg-primary/30">
+
+<body class="min-h-screen flex bg-bgMain font-sans" style="font-family:'Inter',sans-serif;">
 
   <!-- Mobile Overlay -->
   <div id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- Sidebar -->
-  <aside id="adminSidebar" class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-xl">
+  <aside id="adminSidebar"
+    class="w-64 bg-surface border-r border-borderMain flex flex-col fixed h-screen z-40 shadow-sm">
     <div class="p-6 flex items-center gap-3 border-b border-borderMain">
-      <div class="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-        <i data-lucide="shield" class="w-6 h-6 text-white"></i>
+      <div class="w-10 h-10 bg-[#E91E63] rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="shield" class="w-5 h-5 text-white"></i>
       </div>
       <div>
-        <h1 class="text-lg font-bold text-textMain tracking-tight">Admin Panel</h1>
-        <p class="text-xs text-textSub">BI Pelampung</p>
+        <h1 class="text-base font-bold text-textMain tracking-tight">Admin Panel</h1>
+        <p class="text-xs text-textMuted">BI Pelampung</p>
       </div>
     </div>
-    
-    <nav class="flex-1 p-4 space-y-2">
-      <a href="upload.html" class="sidebar-link">
+
+    <nav class="flex-1 p-4 space-y-1">
+      <a href="upload.html"
+        class="sidebar-link sidebar-link-upload flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
         <i data-lucide="upload-cloud" class="w-5 h-5"></i>
         <span>Upload Data</span>
       </a>
-      <a href="kelola.html" class="sidebar-link">
+      <a href="kelola.html"
+        class="sidebar-link sidebar-link-kelola flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
         <i data-lucide="database" class="w-5 h-5"></i>
         <span>Kelola Data</span>
       </a>
-      <a href="log.html" class="sidebar-link">
+      <a href="log.html"
+        class="sidebar-link sidebar-link-log flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium text-textSub">
         <i data-lucide="history" class="w-5 h-5"></i>
-        <span>Log Upload</span>
+        <span>Riwayat Log Upload</span>
       </a>
-      <a href="akun.html" class="sidebar-link active relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <i data-lucide="users" class="w-5 h-5 relative z-10"></i>
-        <span class="relative z-10">Manajemen Akun</span>
+      <a href="akun.html"
+        class="sidebar-link sidebar-link-akun active flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium">
+        <i data-lucide="users" class="w-5 h-5"></i>
+        <span>Manajemen Akun</span>
       </a>
     </nav>
-    
+
     <div class="p-4 border-t border-borderMain">
-      <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-danger/10 hover:text-danger rounded-xl transition-all border border-transparent hover:border-danger/30 font-medium">
+      <button type="button" onclick="logout()"
+        class="w-full flex items-center justify-center gap-2 px-4 py-3 text-textSub hover:bg-red-50 hover:text-danger rounded-xl transition-all border border-transparent hover:border-red-200 font-medium">
         <i data-lucide="log-out" class="w-5 h-5"></i>
         Logout
       </button>
@@ -73,7 +83,8 @@
   </aside>
 
   <!-- Mobile Top Bar -->
-  <div class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3">
+  <div
+    class="md:hidden fixed top-0 left-0 right-0 z-30 bg-surface border-b border-borderMain px-4 py-3 flex items-center gap-3 shadow-sm">
     <button class="hamburger-btn" onclick="openSidebar()" style="display:flex">
       <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
@@ -83,13 +94,15 @@
   <!-- Main Content -->
   <main id="adminMainContent" class="md:ml-64 flex-1 p-4 sm:p-8 pt-20 md:pt-8">
     <div class="max-w-[1400px] mx-auto">
-      
+
       <!-- Header Section -->
       <div class="mb-8">
-        <h2 class="text-3xl font-bold text-textMain tracking-tight">Manajemen Akun</h2>
-        <p class="text-textSub mt-1 mb-6">Kelola data administrator dan owner yang memiliki akses ke sistem analitik.</p>
-        
-        <button onclick="modal_tambah.showModal()" class="btn btn-primary bg-primary text-white border-transparent hover:bg-blue-600 shadow-lg shadow-primary/20 hover:shadow-primary/40 flex items-center gap-2 rounded-xl px-6 w-max">
+        <h2 class="text-2xl font-bold text-textMain tracking-tight">Manajemen Akun</h2>
+        <p class="text-textSub mt-1 mb-6">Kelola data administrator dan owner yang memiliki akses ke sistem analitik.
+        </p>
+
+        <button onclick="modal_tambah.showModal()"
+          class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#E91E63] text-white rounded-xl hover:brightness-95 shadow-md shadow-[#E91E63]/20 font-semibold transition-all">
           <i data-lucide="plus" class="w-5 h-5"></i>
           <span>Tambah Akun</span>
         </button>
@@ -100,9 +113,12 @@
         <div class="flex items-center gap-3">
           <div class="relative flex-1">
             <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchAkun" placeholder="Cari nama, username, email, atau role..." class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all focus:bg-surface">
+            <input type="text" id="searchAkun" placeholder="Cari nama, username, email, atau role..."
+              class="w-full pl-12 pr-4 py-3 bg-bgMain/50 border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary focus:outline-none transition-all focus:bg-surface">
           </div>
-          <button onclick="loadUsers()" class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain/50 hover:text-textMain transition-colors" title="Muat Ulang Data">
+          <button onclick="loadUsers()"
+            class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain/50 hover:text-textMain transition-colors"
+            title="Muat Ulang Data">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
           </button>
         </div>
@@ -112,7 +128,7 @@
       <div class="glass-panel overflow-hidden">
         <div class="overflow-x-auto">
           <table class="table w-full text-sm">
-            <thead class="bg-bgMain text-textSub border-b border-borderMain">
+            <thead class="bg-bgMain text-textMuted border-b border-borderMain">
               <tr>
                 <th class="py-5 px-6 uppercase tracking-wider text-xs font-semibold">Pengguna</th>
                 <th class="py-5 px-6 uppercase tracking-wider text-xs font-semibold">Username</th>
@@ -122,20 +138,24 @@
                 <th class="py-5 px-6 text-center uppercase tracking-wider text-xs font-semibold">Aksi</th>
               </tr>
             </thead>
-            <tbody id="usersTableBody" class="text-textMain divide-y divide-borderMain/50">
+            <tbody id="usersTableBody" class="text-textMain divide-y divide-borderMain">
               <!-- Rows will be rendered dynamically from API -->
             </tbody>
           </table>
         </div>
 
         <!-- Pagination -->
-        <div class="p-5 border-t border-borderMain/50 flex items-center justify-between text-sm text-textSub bg-surface/50">
-          <div>Menampilkan <span class="text-textMain font-medium">1-3</span> dari <span class="text-textMain font-medium">12</span> pengguna</div>
+        <div class="p-5 border-t border-borderMain flex items-center justify-between text-sm text-textSub bg-bgMain/50">
+          <div>Menampilkan <span class="text-textMain font-medium">1-3</span> dari <span
+              class="text-textMain font-medium">12</span> pengguna</div>
           <div class="flex gap-1">
-            <button class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Sebelumnya</button>
-            <button class="btn btn-sm bg-primary border-transparent text-white hover:bg-blue-600 transition-all px-4">1</button>
-            <button class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-4">2</button>
-            <button class="btn btn-sm btn-ghost border border-borderMain hover:bg-bgMain hover:border-textSub transition-all px-3">Selanjutnya</button>
+            <button
+              class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Sebelumnya</button>
+            <button class="px-4 py-1.5 rounded-lg bg-[#E91E63] text-white text-sm font-bold">1</button>
+            <button
+              class="px-4 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">2</button>
+            <button
+              class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Selanjutnya</button>
           </div>
         </div>
 
@@ -148,11 +168,14 @@
   <dialog id="modal_tambah" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box glass-panel p-0 max-w-2xl overflow-hidden relative">
       <!-- Decoration -->
-      <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none"></div>
-      
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none">
+      </div>
+
       <div class="p-8 relative z-10">
         <div class="flex items-center gap-3 mb-8">
-          <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
+          <div
+            class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
             <i data-lucide="user-plus" class="w-6 h-6"></i>
           </div>
           <div>
@@ -167,28 +190,36 @@
               <label class="text-sm font-medium text-textSub">Nama Lengkap</label>
               <div class="relative">
                 <i data-lucide="user" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="text" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted" placeholder="John Doe">
+                <input type="text"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted"
+                  placeholder="John Doe">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Email Address</label>
               <div class="relative">
                 <i data-lucide="mail" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="email" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted" placeholder="john@pelampung.com">
+                <input type="email"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted"
+                  placeholder="john@pelampung.com">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Username</label>
               <div class="relative">
                 <i data-lucide="at-sign" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="text" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted" placeholder="johndoe">
+                <input type="text"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted"
+                  placeholder="johndoe">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Password</label>
               <div class="relative">
                 <i data-lucide="lock" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="password" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted" placeholder="••••••••">
+                <input type="password"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted"
+                  placeholder="••••••••">
               </div>
             </div>
           </div>
@@ -196,9 +227,12 @@
           <div class="space-y-2">
             <label class="text-sm font-medium text-textSub">Role Akses</label>
             <div class="grid grid-cols-2 gap-4">
-              <label class="relative flex cursor-pointer rounded-xl border border-borderMain bg-bgMain p-4 focus:outline-none hover:bg-surface transition-all">
+              <label
+                class="relative flex cursor-pointer rounded-xl border border-borderMain bg-bgMain p-4 focus:outline-none hover:bg-surface transition-all">
                 <input type="radio" name="role_add" value="admin" class="peer sr-only" checked>
-                <div class="peer-checked:border-primary absolute inset-0 rounded-xl border-2 border-transparent transition-all"></div>
+                <div
+                  class="peer-checked:border-primary absolute inset-0 rounded-xl border-2 border-transparent transition-all">
+                </div>
                 <div class="flex items-center gap-3 z-10">
                   <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
                     <i data-lucide="shield" class="w-4 h-4"></i>
@@ -209,9 +243,12 @@
                   </div>
                 </div>
               </label>
-              <label class="relative flex cursor-pointer rounded-xl border border-borderMain bg-bgMain p-4 focus:outline-none hover:bg-surface transition-all">
+              <label
+                class="relative flex cursor-pointer rounded-xl border border-borderMain bg-bgMain p-4 focus:outline-none hover:bg-surface transition-all">
                 <input type="radio" name="role_add" value="owner" class="peer sr-only">
-                <div class="peer-checked:border-purple-500 absolute inset-0 rounded-xl border-2 border-transparent transition-all"></div>
+                <div
+                  class="peer-checked:border-purple-500 absolute inset-0 rounded-xl border-2 border-transparent transition-all">
+                </div>
                 <div class="flex items-center gap-3 z-10">
                   <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
                     <i data-lucide="briefcase" class="w-4 h-4"></i>
@@ -226,10 +263,13 @@
           </div>
         </form>
       </div>
-      
+
       <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
-        <button onclick="modal_tambah.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-        <button id="btnCreateUser" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Buat Akun</button>
+        <button onclick="modal_tambah.close()"
+          class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnCreateUser"
+          class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Buat
+          Akun</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -241,11 +281,14 @@
   <dialog id="modal_edit" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box glass-panel p-0 max-w-2xl overflow-hidden relative">
       <!-- Decoration -->
-      <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none"></div>
-      
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mt-20 -mr-20 pointer-events-none">
+      </div>
+
       <div class="p-8 relative z-10">
         <div class="flex items-center gap-3 mb-8">
-          <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
+          <div
+            class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20">
             <i data-lucide="edit-3" class="w-6 h-6"></i>
           </div>
           <div>
@@ -260,28 +303,36 @@
               <label class="text-sm font-medium text-textSub">Nama Lengkap</label>
               <div class="relative">
                 <i data-lucide="user" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="text" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain" value="Admin Utama">
+                <input type="text"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain"
+                  value="Admin Utama">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Email Address</label>
               <div class="relative">
                 <i data-lucide="mail" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="email" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain" value="admin.utama@pelampung.com">
+                <input type="email"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain"
+                  value="admin.utama@pelampung.com">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Username</label>
               <div class="relative">
                 <i data-lucide="at-sign" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="text" id="edit_username" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain" value="">
+                <input type="text" id="edit_username"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain"
+                  value="">
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Password Baru</label>
               <div class="relative">
                 <i data-lucide="lock" class="w-4 h-4 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-                <input type="password" class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted" placeholder="Biarkan kosong jika tidak diubah">
+                <input type="password"
+                  class="w-full pl-11 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm text-textMain placeholder:text-textMuted"
+                  placeholder="Biarkan kosong jika tidak diubah">
               </div>
             </div>
           </div>
@@ -289,14 +340,16 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-borderMain/50 mt-4">
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Role Akses</label>
-              <select class="select w-full bg-bgMain border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary h-[46px]">
+              <select
+                class="select w-full bg-bgMain border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary h-[46px]">
                 <option selected>Administrator</option>
                 <option>Owner</option>
               </select>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-medium text-textSub">Status Akun</label>
-              <select class="select w-full bg-bgMain border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary h-[46px]">
+              <select
+                class="select w-full bg-bgMain border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-primary h-[46px]">
                 <option selected>Aktif</option>
                 <option>Nonaktif (Suspend)</option>
               </select>
@@ -304,10 +357,13 @@
           </div>
         </form>
       </div>
-      
+
       <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain/50">
-        <button onclick="modal_edit.close()" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-        <button id="btnSaveEdit" class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Simpan Perubahan</button>
+        <button onclick="modal_edit.close()"
+          class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
+        <button id="btnSaveEdit"
+          class="btn bg-primary text-white border-transparent hover:bg-blue-600 px-8 rounded-xl shadow-lg shadow-primary/20">Simpan
+          Perubahan</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -324,12 +380,17 @@
         </div>
       </div>
       <h3 class="font-bold text-2xl text-textMain mb-2">Hapus Pengguna?</h3>
-      <p class="text-textSub text-sm leading-relaxed mb-8">Anda akan menghapus akun <span id="deleteUserName" class="font-bold text-textMain">-</span> secara permanen. Tindakan ini tidak dapat dibatalkan dan pengguna akan kehilangan semua akses.</p>
-      
+      <p class="text-textSub text-sm leading-relaxed mb-8">Anda akan menghapus akun <span id="deleteUserName"
+          class="font-bold text-textMain">-</span> secara permanen. Tindakan ini tidak dapat dibatalkan dan pengguna
+        akan kehilangan semua akses.</p>
+
       <div class="flex justify-center gap-3">
         <div class="w-full flex gap-3">
-          <button onclick="modal_delete.close()" class="btn btn-ghost hover:bg-surface border border-borderMain text-textMain flex-1 rounded-xl">Batal</button>
-          <button id="btnConfirmDelete" class="btn bg-danger hover:bg-red-600 text-white border-transparent flex-1 rounded-xl shadow-lg shadow-danger/20">Hapus Permanen</button>
+          <button onclick="modal_delete.close()"
+            class="btn btn-ghost hover:bg-surface border border-borderMain text-textMain flex-1 rounded-xl">Batal</button>
+          <button id="btnConfirmDelete"
+            class="btn bg-danger hover:bg-red-600 text-white border-transparent flex-1 rounded-xl shadow-lg shadow-danger/20">Hapus
+            Permanen</button>
         </div>
       </div>
     </div>
@@ -354,7 +415,7 @@
   <script>
     // Auth guard: only admin can access this page
     requireAuth(['admin']);
-    
+
     lucide.createIcons();
 
     function openSidebar() {
@@ -388,7 +449,7 @@
       if (!res) return;
       let users = await res.json();
       const tbody = document.getElementById('usersTableBody');
-      
+
       if (users.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="text-center py-12 text-textMuted">Belum ada data pengguna.</td></tr>';
         return;
@@ -407,8 +468,8 @@
         }
 
         // Otherwise, general text search (name, username, email)
-        return u.full_name.toLowerCase().includes(searchTerm) || 
-          u.username.toLowerCase().includes(searchTerm) || 
+        return u.full_name.toLowerCase().includes(searchTerm) ||
+          u.username.toLowerCase().includes(searchTerm) ||
           u.email.toLowerCase().includes(searchTerm);
       });
 
@@ -576,4 +637,5 @@
     loadUsers();
   </script>
 </body>
+
 </html>
