@@ -107,6 +107,32 @@
         </button>
       </div>
 
+      <div class="glass-panel p-3 sm:p-4 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3 items-center">
+          <div class="relative">
+            <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="searchLog" placeholder="Cari nama file..."
+              class="w-full pl-12 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-[#F5821F] focus:outline-none transition-all">
+          </div>
+          <select id="filterLogBulan" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Bulan</option>
+          </select>
+          <select id="filterLogTahun" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Tahun</option>
+          </select>
+          <select id="filterLogStatus" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Status</option>
+            <option value="Sukses">Sukses</option>
+            <option value="Gagal">Gagal</option>
+          </select>
+          <button onclick="resetLogFilters()"
+            class="px-4 py-3 rounded-xl border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-colors text-sm font-medium">
+            Reset
+          </button>
+        </div>
+        <div id="logTotalSummary" class="mt-3 text-sm text-textSub">Total: 0 log</div>
+      </div>
+
       <!-- Data Table -->
       <div class="glass-panel overflow-hidden">
         <div class="overflow-x-auto">
@@ -127,6 +153,14 @@
             </tbody>
           </table>
         </div>
+        <div class="p-5 border-t border-borderMain flex items-center justify-between text-sm text-textSub bg-bgMain/50">
+          <div id="logPaginationInfo">Menampilkan 0 log</div>
+          <div class="flex gap-1">
+            <button id="btnLogPrev" class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Sebelumnya</button>
+            <span id="logPageIndicator" class="px-4 py-1.5 rounded-lg bg-[#F5821F] text-white text-sm font-bold pointer-events-none">1</span>
+            <button id="btnLogNext" class="px-3 py-1.5 rounded-lg border border-borderMain text-textSub hover:bg-bgMain transition-all text-sm font-medium">Selanjutnya</button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -145,17 +179,67 @@
       document.getElementById('sidebarOverlay').classList.remove('active');
     }
 
+    let currentLogPage = 1;
+    const logsPerPage = 15;
+    let logSearchTimer = null;
+    const bulanLabels = {
+      '01': 'Januari', '02': 'Februari', '03': 'Maret', '04': 'April',
+      '05': 'Mei', '06': 'Juni', '07': 'Juli', '08': 'Agustus',
+      '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Desember'
+    };
+
+    async function loadLogFilterOptions() {
+      const res = await apiFetch('/transaksi/log/upload-filter-options');
+      if (!res || !res.ok) return;
+      const options = await res.json();
+
+      const bulanSelect = document.getElementById('filterLogBulan');
+      options.bulan.forEach(bulan => {
+        const opt = document.createElement('option');
+        opt.value = bulan;
+        opt.textContent = bulanLabels[bulan] || bulan;
+        bulanSelect.appendChild(opt);
+      });
+
+      const tahunSelect = document.getElementById('filterLogTahun');
+      options.tahun.forEach(tahun => {
+        const opt = document.createElement('option');
+        opt.value = tahun;
+        opt.textContent = tahun;
+        tahunSelect.appendChild(opt);
+      });
+    }
+
     async function loadLogs() {
       const tbody = document.getElementById('logsTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8"><span class="loading loading-spinner text-primary"></span></td></tr>';
 
-      const res = await apiFetch('/transaksi/log/uploads');
+      const params = new URLSearchParams({ page: currentLogPage, per_page: logsPerPage });
+      const search = document.getElementById('searchLog').value;
+      const bulan = document.getElementById('filterLogBulan').value;
+      const tahun = document.getElementById('filterLogTahun').value;
+      const status = document.getElementById('filterLogStatus').value;
+      if (search) params.set('search', search);
+      if (bulan) params.set('bulan', bulan);
+      if (tahun) params.set('tahun', tahun);
+      if (status) params.set('status', status);
+
+      const res = await apiFetch(`/transaksi/log/uploads?${params.toString()}`);
       if (!res) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-danger">Gagal memuat data.</td></tr>';
         return;
       }
 
-      const logs = await res.json();
+      const payload = await res.json();
+      const logs = payload.data;
+      const total = payload.total;
+      const page = payload.page;
+
+      document.getElementById('logTotalSummary').textContent = `Total: ${total.toLocaleString('id-ID')} log`;
+      document.getElementById('logPaginationInfo').innerHTML = `Menampilkan <span class="text-textMain font-medium">${logs.length > 0 ? (page - 1) * logsPerPage + 1 : 0}-${(page - 1) * logsPerPage + logs.length}</span> dari <span class="text-textMain font-medium">${total}</span> log`;
+      document.getElementById('logPageIndicator').textContent = page;
+      document.getElementById('btnLogPrev').disabled = page <= 1;
+      document.getElementById('btnLogNext').disabled = page * logsPerPage >= total;
 
       if (logs.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-textMuted">Belum ada history upload.</td></tr>';
@@ -174,7 +258,7 @@
 
         return `
           <tr class="hover:bg-bgMain/30 transition-colors group">
-            <td class="px-6 py-4 font-medium text-textSub">${index + 1}</td>
+            <td class="px-6 py-4 font-medium text-textSub">${(page - 1) * logsPerPage + index + 1}</td>
             <td class="px-6 py-4 text-textSub">${l.tanggal}</td>
             <td class="px-6 py-4 font-mono text-xs text-primary">${l.nama_file}</td>
             <td class="px-6 py-4 text-center font-medium">${l.jumlah_baris}</td>
@@ -196,6 +280,15 @@
       lucide.createIcons();
     }
 
+    function resetLogFilters() {
+      document.getElementById('searchLog').value = '';
+      document.getElementById('filterLogBulan').value = '';
+      document.getElementById('filterLogTahun').value = '';
+      document.getElementById('filterLogStatus').value = '';
+      currentLogPage = 1;
+      loadLogs();
+    }
+
     async function deleteLog(id) {
       if (!confirm('Hapus log ini?')) return;
       const res = await apiFetch(`/transaksi/log/uploads/${id}`, { method: 'DELETE' });
@@ -206,8 +299,26 @@
       }
     }
 
+    document.getElementById('searchLog').addEventListener('input', () => {
+      clearTimeout(logSearchTimer);
+      logSearchTimer = setTimeout(() => { currentLogPage = 1; loadLogs(); }, 400);
+    });
+    ['filterLogBulan', 'filterLogTahun', 'filterLogStatus'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => {
+        currentLogPage = 1;
+        loadLogs();
+      });
+    });
+    document.getElementById('btnLogPrev').addEventListener('click', () => {
+      if (currentLogPage > 1) { currentLogPage--; loadLogs(); }
+    });
+    document.getElementById('btnLogNext').addEventListener('click', () => {
+      currentLogPage++;
+      loadLogs();
+    });
+
     // Init
-    loadLogs();
+    loadLogFilterOptions().then(loadLogs);
   </script>
 </body>
 
