@@ -113,18 +113,27 @@
 
       <!-- Filters -->
       <div class="glass-panel p-3 sm:p-4 mb-6">
-        <div class="flex items-center gap-3">
-          <div class="relative flex-1">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_auto_auto_auto] gap-3 items-center">
+          <div class="relative">
             <i data-lucide="search" class="w-5 h-5 text-textMuted absolute left-4 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchInput" placeholder="Cari No PO, Pelanggan, Produk..."
+            <input type="text" id="searchInput" placeholder="Cari pelanggan, kategori, model, kota..."
               class="w-full pl-12 pr-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain focus:ring-2 focus:ring-[#2BAE8E] focus:outline-none transition-all">
           </div>
-          <button onclick="fetchData()"
-            class="shrink-0 flex items-center justify-center w-11 h-11 rounded-xl border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-colors"
-            title="Muat Ulang Data">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          <select id="filterBulan" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Bulan</option>
+          </select>
+          <select id="filterTahun" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Tahun</option>
+          </select>
+          <select id="filterWilayah" class="px-4 py-3 bg-bgMain border border-borderMain rounded-xl text-sm text-textMain">
+            <option value="">Semua Wilayah</option>
+          </select>
+          <button onclick="resetFilters()"
+            class="px-4 py-3 rounded-xl border border-borderMain text-textSub hover:bg-bgMain hover:text-textMain transition-colors text-sm font-medium">
+            Reset
           </button>
         </div>
+        <div id="totalDataSummary" class="mt-3 text-sm text-textSub">Total: 0 data</div>
       </div>
 
       <!-- Data Table -->
@@ -260,19 +269,60 @@
     const perPage = 15;
     let searchTimer = null;
     let currentEditId = null;
+    const bulanLabels = {
+      '01': 'Januari', '02': 'Februari', '03': 'Maret', '04': 'April',
+      '05': 'Mei', '06': 'Juni', '07': 'Juli', '08': 'Agustus',
+      '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Desember'
+    };
 
     const formatCurrency = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
+
+    async function loadFilterOptions() {
+      const res = await apiFetch('/transaksi/filter-options');
+      if (!res || !res.ok) return;
+      const options = await res.json();
+
+      const bulanSelect = document.getElementById('filterBulan');
+      options.bulan.forEach(bulan => {
+        const opt = document.createElement('option');
+        opt.value = bulan;
+        opt.textContent = bulanLabels[bulan] || bulan;
+        bulanSelect.appendChild(opt);
+      });
+
+      const tahunSelect = document.getElementById('filterTahun');
+      options.tahun.forEach(tahun => {
+        const opt = document.createElement('option');
+        opt.value = tahun;
+        opt.textContent = tahun;
+        tahunSelect.appendChild(opt);
+      });
+
+      const wilayahSelect = document.getElementById('filterWilayah');
+      options.wilayah.forEach(wilayah => {
+        const opt = document.createElement('option');
+        opt.value = wilayah;
+        opt.textContent = wilayah;
+        wilayahSelect.appendChild(opt);
+      });
+    }
 
     async function fetchData() {
       const tbody = document.getElementById('dataTableBody');
       tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12"><span class="loading loading-spinner text-primary"></span></td></tr>';
 
       const search = document.getElementById('searchInput').value;
+      const bulan = document.getElementById('filterBulan').value;
+      const tahun = document.getElementById('filterTahun').value;
+      const wilayah = document.getElementById('filterWilayah').value;
 
-      let url = `/transaksi/?page=${currentPage}&per_page=${perPage}`;
-      if (search) url += `&search=${encodeURIComponent(search)}`;
+      const params = new URLSearchParams({ page: currentPage, per_page: perPage });
+      if (search) params.set('search', search);
+      if (bulan) params.set('bulan', bulan);
+      if (tahun) params.set('tahun', tahun);
+      if (wilayah) params.set('wilayah', wilayah);
 
-      const res = await apiFetch(url);
+      const res = await apiFetch(`/transaksi/?${params.toString()}`);
       if (!res) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-danger">Gagal memuat data.</td></tr>';
         return;
@@ -280,6 +330,7 @@
 
       const { data, total, page } = await res.json();
 
+      document.getElementById('totalDataSummary').textContent = `Total: ${total.toLocaleString('id-ID')} data`;
       document.getElementById('paginationInfo').innerHTML = `Menampilkan <span class="text-textMain font-medium">${data.length > 0 ? (page - 1) * perPage + 1 : 0}-${(page - 1) * perPage + data.length}</span> dari <span class="text-textMain font-medium">${total}</span> data`;
       document.getElementById('pageIndicator').textContent = page;
 
@@ -324,10 +375,25 @@
       lucide.createIcons();
     }
 
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filterBulan').value = '';
+      document.getElementById('filterTahun').value = '';
+      document.getElementById('filterWilayah').value = '';
+      currentPage = 1;
+      fetchData();
+    }
+
     // Event Listeners
     document.getElementById('searchInput').addEventListener('input', () => {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => { currentPage = 1; fetchData(); }, 500);
+    });
+    ['filterBulan', 'filterTahun', 'filterWilayah'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => {
+        currentPage = 1;
+        fetchData();
+      });
     });
     document.getElementById('btnPrev').addEventListener('click', () => { if (currentPage > 1) { currentPage--; fetchData(); } });
     document.getElementById('btnNext').addEventListener('click', () => { currentPage++; fetchData(); });
@@ -397,7 +463,7 @@
     });
 
     // Init
-    fetchData();
+    loadFilterOptions().then(fetchData);
   </script>
 </body>
 
