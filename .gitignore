@@ -2,3 +2,29 @@ node_modules/
 dist/
 
 .worktrees/
+
+# (Tambahkan baris ini ke file yang sudah ada)
+
+# Environment variables (SANGAT PENTING agar API keys/secrets tidak bocor)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Caching tambahan
+.eslintcache
