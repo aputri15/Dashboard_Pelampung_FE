@@ -1,0 +1,10 @@
+services:
+  frontend:
+    build: .
+    image: ghcr.io/aputri15/dashboard_pelampung_fe:latest
+    container_name: pelampung-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - API_BASE_URL=http://127.0.0.1:8000/api/v1

@@ -3,7 +3,7 @@
  * Handles all communication with the FastAPI backend
  */
 
-const API_BASE = 'http://127.0.0.1:8000/api/v1';
+const API_BASE = window.__API_BASE__ || 'http://127.0.0.1:8000/api/v1';
 
 /**
  * Get stored access token
