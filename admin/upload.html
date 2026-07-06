@@ -99,13 +99,11 @@
       <div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h2 class="text-2xl font-bold text-textMain tracking-tight">Upload Data Transaksi</h2>
-          <p class="text-textSub mt-1">Upload file Excel data transaksi bulanan ke sistem database.</p>
+          <p class="text-textSub mt-1">Upload file Excel data transaksi tahunan ke sistem database.</p>
+          <p class="text-sm text-textSub mt-2">
+            Perbaiki data langsung di spreadsheet sumber. Jika file yang sama pernah di-upload, buka Riwayat Log Upload untuk mengizinkan upload ulang.
+          </p>
         </div>
-        <button id="btnOpenManualAdd"
-          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#4A90D9] text-white rounded-xl hover:brightness-95 shadow-md shadow-[#4A90D9]/20 font-semibold transition-all">
-          <i data-lucide="plus" class="w-5 h-5"></i>
-          <span>Tambahkan Data</span>
-        </button>
       </div>
 
       <!-- Upload Card -->
@@ -172,37 +170,6 @@
     </div>
   </main>
 
-  <dialog id="modal_manual_add" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box glass-panel p-0 max-w-4xl overflow-hidden">
-      <div class="p-6 border-b border-borderMain">
-        <h3 class="font-bold text-xl text-textMain">Tambahkan Data Transaksi</h3>
-        <p class="text-textSub text-sm mt-1">Masukkan satu baris transaksi yang belum masuk dari dataset.</p>
-      </div>
-      <form id="manualAddForm" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input id="manual_nomor_po" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Nomor PO" required>
-        <input id="manual_tanggal_po" type="date" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" required>
-        <input id="manual_id_pelanggan" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="ID Pelanggan" required>
-        <input id="manual_nama_pelanggan" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Nama Pelanggan" required>
-        <input id="manual_wilayah" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Wilayah" required>
-        <input id="manual_provinsi" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Provinsi" required>
-        <input id="manual_kota" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Kota" required>
-        <input id="manual_id_produk" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="ID Produk" required>
-        <input id="manual_nama_model" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Nama Model" required>
-        <input id="manual_kategori" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Kategori" required>
-        <input id="manual_qty" type="number" min="1" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Qty" required>
-        <input id="manual_harga_satuan" type="number" min="0" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm" placeholder="Harga Satuan" required>
-        <input id="manual_modal_unit" type="number" min="0" class="w-full px-3 py-2 bg-bgMain border border-borderMain rounded-lg text-sm md:col-span-2" placeholder="Modal Unit" required>
-      </form>
-      <div class="bg-bgMain/80 p-6 flex justify-end gap-3 border-t border-borderMain">
-        <button type="button" id="btnCancelManualAdd" class="btn btn-ghost hover:bg-surface text-textSub px-6 rounded-xl">Batal</button>
-        <button type="button" id="btnSubmitManualAdd" class="btn bg-[#4A90D9] text-white border-transparent hover:brightness-95 px-8 rounded-xl">Simpan Data</button>
-      </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>Tutup</button>
-    </form>
-  </dialog>
-
   <script>
     // Guard
     requireAuth(['admin']);
@@ -230,30 +197,6 @@
     const errorList = document.getElementById('errorList');
 
     let selectedFile = null;
-    const manualModal = document.getElementById('modal_manual_add');
-    const manualForm = document.getElementById('manualAddForm');
-
-    function resetManualForm() {
-      manualForm.reset();
-    }
-
-    function getManualPayload() {
-      return {
-        nomor_po: document.getElementById('manual_nomor_po').value.trim(),
-        tanggal_po: document.getElementById('manual_tanggal_po').value,
-        id_pelanggan: document.getElementById('manual_id_pelanggan').value.trim(),
-        nama_pelanggan: document.getElementById('manual_nama_pelanggan').value.trim(),
-        wilayah: document.getElementById('manual_wilayah').value.trim(),
-        provinsi: document.getElementById('manual_provinsi').value.trim(),
-        kota: document.getElementById('manual_kota').value.trim(),
-        id_produk: document.getElementById('manual_id_produk').value.trim(),
-        nama_model: document.getElementById('manual_nama_model').value.trim(),
-        kategori: document.getElementById('manual_kategori').value.trim(),
-        qty: parseInt(document.getElementById('manual_qty').value, 10),
-        harga_satuan: parseFloat(document.getElementById('manual_harga_satuan').value),
-        modal_unit: parseFloat(document.getElementById('manual_modal_unit').value),
-      };
-    }
 
     function showUploadResult(type, title, message, lines = []) {
       uploadResult.classList.remove('hidden');
@@ -266,32 +209,25 @@
       lucide.createIcons();
     }
 
-    document.getElementById('btnOpenManualAdd').addEventListener('click', () => {
-      resetManualForm();
-      manualModal.showModal();
-    });
-
-    document.getElementById('btnCancelManualAdd').addEventListener('click', () => {
-      resetManualForm();
-      manualModal.close();
-    });
-
-    document.getElementById('btnSubmitManualAdd').addEventListener('click', async () => {
-      if (!manualForm.reportValidity()) return;
-      const res = await apiFetch('/transaksi/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(getManualPayload())
-      });
-      if (res && res.ok) {
-        resetManualForm();
-        manualModal.close();
-        showUploadResult('success', 'Data Berhasil Ditambahkan', 'Satu baris transaksi berhasil dimasukkan ke database.');
-      } else {
-        const err = await res?.json();
-        showUploadResult('error', 'Data Gagal Ditambahkan', err?.detail || 'Periksa kembali field transaksi.');
+    function renderErrorDetails(payload) {
+      const details = Array.isArray(payload?.error_details) ? payload.error_details : [];
+      if (details.length > 0) {
+        return details.map(detail => {
+          const value = detail.value === '' ? 'kosong' : detail.value;
+          return `Baris ${detail.row} | Kolom ${detail.column} | Nilai: ${value} | Perbaikan: ${detail.fix}`;
+        });
       }
-    });
+
+      if (payload?.error_code === 'duplicate_upload' && payload.duplicate_upload) {
+        const d = payload.duplicate_upload;
+        return [
+          `File pernah di-upload pada ${d.tanggal} oleh ${d.uploaded_by}.`,
+          'Buka Riwayat Log Upload, lalu klik Izinkan Upload Ulang pada log file tersebut.'
+        ];
+      }
+
+      return Array.isArray(payload?.errors) ? payload.errors : [];
+    }
 
     fileInput.addEventListener('change', function (e) {
       if (e.target.files.length > 0) {
@@ -374,14 +310,13 @@
           fileNameDisplay.textContent = 'Tarik dan lepas file Excel di sini';
           fileNameDisplay.classList.remove('text-primary');
         } else {
-          resultAlert.className = 'p-4 rounded-xl border flex items-start gap-3 bg-danger/10 border-danger/20 text-danger';
-          resultIcon.innerHTML = '<i data-lucide="alert-triangle" class="w-5 h-5"></i>';
-          resultTitle.textContent = 'Upload Gagal / Ada Peringatan';
-          resultMessage.textContent = data.message || data.detail || 'Terjadi kesalahan sistem.';
-
-          if (data.errors && data.errors.length > 0) {
-            errorList.innerHTML = data.errors.map(err => `<div>- ${err}</div>`).join('');
-          }
+          const title = data?.error_code === 'duplicate_upload' ? 'File Pernah Di-upload' : 'Upload Gagal';
+          showUploadResult(
+            'error',
+            title,
+            data?.message || data?.detail || 'Periksa kembali file Excel sebelum upload ulang.',
+            renderErrorDetails(data)
+          );
         }
         lucide.createIcons();
 

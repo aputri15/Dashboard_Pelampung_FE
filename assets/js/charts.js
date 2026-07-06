@@ -39,11 +39,11 @@ window.appCharts = {};
 function initChart(id, option) {
   const el = document.getElementById(id);
   if (!el) return;
-  
+
   suppressResize = true;
-  
+
   let chart = window.appCharts[id];
-  
+
   // Reuse existing instance instead of dispose+recreate (prevents flicker)
   if (chart && !chart.isDisposed()) {
     chart.setOption(option, true); // true = replace entire option, not merge
@@ -56,7 +56,7 @@ function initChart(id, option) {
     window.appCharts[id] = chart;
     chartObserver.observe(el);
   }
-  
+
   // Re-enable resize observer after rendering settles
   requestAnimationFrame(() => { suppressResize = false; });
 }
@@ -173,10 +173,12 @@ async function loadProfitabilitas() {
         name: 'GPM (%)', type: 'line', data: data.gpm_trend.map(d => d.gpm), smooth: true, symbolSize: 8,
         itemStyle: { color: colors.primary },
         areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(59,130,246,0.5)' }, { offset: 1, color: 'rgba(59,130,246,0)' }]) },
-        markLine: { data: [
-          { yAxis: 30, name: 'Target 30%', lineStyle: { color: colors.success, type: 'solid' } },
-          { yAxis: 15, name: 'Batas 15%', lineStyle: { color: colors.danger, type: 'solid' } }
-        ]}
+        markLine: {
+          data: [
+            { yAxis: 30, name: 'Target 30%', lineStyle: { color: colors.success, type: 'solid' } },
+            { yAxis: 15, name: 'Batas 15%', lineStyle: { color: colors.danger, type: 'solid' } }
+          ]
+        }
       }]
     });
   }
@@ -286,14 +288,16 @@ async function loadProductFit() {
   data.forEach(d => {
     const key = d.nama_model;
     if (!modelMap[key]) {
-      modelMap[key] = { nama_model: d.nama_model, id_produk: d.id_produk, kategori: d.kategori,
-                        wilayah: d.wilayah, volume: 0, total_profit: 0,
-                        gpm_sum: 0, count: 0, status: d.status };
+      modelMap[key] = {
+        nama_model: d.nama_model, id_produk: d.id_produk, kategori: d.kategori,
+        wilayah: d.wilayah, volume: 0, total_profit: 0,
+        gpm_sum: 0, count: 0, status: d.status
+      };
     }
-    modelMap[key].volume       += d.volume;
+    modelMap[key].volume += d.volume;
     modelMap[key].total_profit += d.total_profit;
-    modelMap[key].gpm_sum      += d.gpm_percent;
-    modelMap[key].count        += 1;
+    modelMap[key].gpm_sum += d.gpm_percent;
+    modelMap[key].count += 1;
   });
   const models = Object.values(modelMap)
     .map(m => ({ ...m, gpm: m.count > 0 ? m.gpm_sum / m.count : 0 }))
@@ -368,8 +372,8 @@ async function loadProductFit() {
         color: colors.textSub,
         formatter: p => {
           const m = chartModels[p.dataIndex];
-          const vol = m.volume >= 1e6 ? (m.volume/1e6).toFixed(1)+'Jt'
-                    : m.volume >= 1000 ? (m.volume/1000).toFixed(0)+'K' : m.volume;
+          const vol = m.volume >= 1e6 ? (m.volume / 1e6).toFixed(1) + 'Jt'
+            : m.volume >= 1000 ? (m.volume / 1000).toFixed(0) + 'K' : m.volume;
           return `${p.value.toFixed(1)}%  (${vol})`;
         }
       },
@@ -377,10 +381,14 @@ async function loadProductFit() {
         silent: true, animation: false,
         lineStyle: { type: 'dashed', width: 1.5 },
         data: [
-          { xAxis: 30, lineStyle: { color: colors.success, opacity: 0.7 },
-            label: { color: colors.success, formatter: 'Sehat \u226530%', fontSize: 10, position: 'insideEndTop' } },
-          { xAxis: 15, lineStyle: { color: colors.warning, opacity: 0.7 },
-            label: { color: colors.warning, formatter: 'Waspada \u226515%', fontSize: 10, position: 'insideEndTop' } }
+          {
+            xAxis: 30, lineStyle: { color: colors.success, opacity: 0.7 },
+            label: { color: colors.success, formatter: 'Sehat \u226530%', fontSize: 10, position: 'insideEndTop' }
+          },
+          {
+            xAxis: 15, lineStyle: { color: colors.warning, opacity: 0.7 },
+            label: { color: colors.warning, formatter: 'Waspada \u226515%', fontSize: 10, position: 'insideEndTop' }
+          }
         ]
       }
     }]
@@ -424,7 +432,7 @@ async function loadProductFit() {
       .slice(0, MAX_RIGHT)
       .reverse();
 
-    const wilayahList  = ['Jawa', 'Sumatera', 'Kalimantan'];
+    const wilayahList = ['Jawa', 'Sumatera', 'Kalimantan'];
     const wilayahColor = { Jawa: colors.primary, Sumatera: colors.orange, Kalimantan: colors.purple };
 
     initChart('chartTopGPM', {
@@ -445,10 +453,10 @@ async function loadProductFit() {
             if (p.value === null || p.value === undefined) return;
             const col = wilayahColor[p.seriesName] || '#fff';
             const status = p.value > 30 ? 'Sehat' : p.value >= 15 ? 'Waspada' : 'Bahaya';
-            const sCol  = p.value > 30 ? colors.success : p.value >= 15 ? colors.warning : colors.danger;
+            const sCol = p.value > 30 ? colors.success : p.value >= 15 ? colors.warning : colors.danger;
             html += `<span style="color:${col}">&#9632;</span> ${p.seriesName}: `
-                  + `<strong style="color:${sCol}">${p.value.toFixed(1)}%</strong> `
-                  + `<span style="color:#64748B;font-size:10px">(${status})</span><br/>`;
+              + `<strong style="color:${sCol}">${p.value.toFixed(1)}%</strong> `
+              + `<span style="color:#64748B;font-size:10px">(${status})</span><br/>`;
           });
           return html;
         }
@@ -595,7 +603,7 @@ function productTableNext() {
 
 // --- GRAFIK KIRI: Internal Sukabumi (KEBAL terhadap filter bulan) ---
 async function loadInternalSukabumi() {
-  const kapasitas = document.getElementById('rangeKarungTab3')?.value || 1000;
+  const kapasitas = document.getElementById('rangeKarungTab3')?.value || 100000;
   const res = await apiFetch(`/analytics/evaluasi-logistik/internal?kapasitas=${kapasitas}`);
   if (!res) return;
   const data = await res.json();
@@ -621,7 +629,7 @@ async function loadInternalSukabumi() {
     grid: { top: 40, right: 60, bottom: 50, left: 60 },
     tooltip: {
       trigger: 'axis',
-      formatter: function(params) {
+      formatter: function (params) {
         let util = params.find(p => p.seriesName === 'Utilization (%)');
         let cost = params.find(p => p.seriesName === 'Cost per Unit (Rp)');
         let res = `<strong>${params[0].axisValue}</strong><br/>`;
@@ -636,7 +644,8 @@ async function loadInternalSukabumi() {
       { type: 'value', name: 'Util (%)', nameTextStyle: { color: colors.primary, fontWeight: 'bold' }, axisLabel: { color: colors.primary, formatter: '{value}%' }, splitLine: { show: false }, min: 0, alignTicks: true }
     ],
     series: [
-      { name: 'Cost per Unit (Rp)', type: 'bar', data: sCost, itemStyle: { color: colors.orange, borderRadius: [4, 4, 0, 0] },
+      {
+        name: 'Cost per Unit (Rp)', type: 'bar', data: sCost, itemStyle: { color: colors.orange, borderRadius: [4, 4, 0, 0] },
         label: {
           show: true,
           position: 'insideTop',
@@ -647,7 +656,8 @@ async function loadInternalSukabumi() {
           distance: 5
         }
       },
-      { name: 'Utilization (%)', type: 'line', yAxisIndex: 1, data: sUtil, itemStyle: { color: colors.primary }, symbolSize: 8,
+      {
+        name: 'Utilization (%)', type: 'line', yAxisIndex: 1, data: sUtil, itemStyle: { color: colors.primary }, symbolSize: 8,
         label: {
           show: true,
           position: 'top',
@@ -657,7 +667,7 @@ async function loadInternalSukabumi() {
           color: colors.primary
         },
         markLine: {
-          data: [ { yAxis: 100, name: 'Kapasitas Penuh', lineStyle: { color: colors.success, type: 'dashed' } } ]
+          data: [{ yAxis: 100, name: 'Kapasitas Penuh', lineStyle: { color: colors.success, type: 'dashed' } }]
         }
       }
     ]
@@ -667,8 +677,8 @@ async function loadInternalSukabumi() {
 // --- GRAFIK KANAN + KPI EKSTERNAL + TABEL (dipengaruhi filter bulan) ---
 async function loadEksternalCOD() {
   const bulan = document.getElementById('filterBulanTab3')?.value || '';
-  const kapasitas = document.getElementById('rangeKarungTab3')?.value || 1000;
-  
+  const kapasitas = document.getElementById('rangeKarungTab3')?.value || 100000;
+
   let params = [];
   if (bulan) params.push(`bulan=${encodeURIComponent(bulan)}`);
   params.push(`kapasitas=${encodeURIComponent(kapasitas)}`);
@@ -701,11 +711,12 @@ async function loadEksternalCOD() {
     ],
     series: [
       { name: 'Volume Penjualan', type: 'bar', data: eQty, itemStyle: { color: colors.purple, borderRadius: [4, 4, 0, 0] } },
-      { name: 'Beban Ongkir (LCR)', type: 'line', yAxisIndex: 1, data: eLcr, symbolSize: 8,
+      {
+        name: 'Beban Ongkir (LCR)', type: 'line', yAxisIndex: 1, data: eLcr, symbolSize: 8,
         itemStyle: { color: p => p.value <= 15 ? colors.success : (p.value <= 25 ? colors.warning : colors.danger) },
         lineStyle: { color: colors.warning },
         markLine: {
-          data: [ 
+          data: [
             { yAxis: 15, name: 'Rawan (>15%)', lineStyle: { color: colors.warning, type: 'dashed' } },
             { yAxis: 25, name: 'Bahaya (>25%)', lineStyle: { color: colors.danger, type: 'solid' } }
           ]
@@ -718,28 +729,53 @@ async function loadEksternalCOD() {
   const tbody = document.getElementById('tableEvaluasiBody');
   if (tbody) {
     tbody.innerHTML = data.tabel_data.map(d => {
-      let badgeColor = d.status.includes('Optimal') || d.status.includes('Sehat') ? 'success' :
-                       (d.status.includes('Rawan') || d.status.includes('Under-utilized') ? 'warning' : 'danger');
-      let badge = `<span class="badge bg-${badgeColor}/20 text-${badgeColor} border-transparent">${d.status}</span>`;
-      // Format cost_per_unit: Rp 36.000
-      const costFmt = `Rp ${Math.round(d.cost_per_unit).toLocaleString('id-ID')}`;
-      // Format kebocoran: Rp 1.600.000
-      const kebocoranFmt = d.kebocoran > 0 ? `Rp ${Math.round(d.kebocoran).toLocaleString('id-ID')}` : '-';
-      const kapasitasFmt = (d.kapasitas && d.kapasitas !== '-') ? Number(d.kapasitas).toLocaleString('id-ID') : '-';
-      
-      return `<tr class="hover:bg-bgMain/30 transition-colors">
-        <td class="font-medium text-textSub whitespace-nowrap">${d.wilayah}</td>
-        <td class="whitespace-nowrap">${d.kota}</td>
-        <td><span class="text-xs px-2 py-1 bg-surface border border-borderMain rounded text-textSub whitespace-nowrap">${d.skema}</span></td>
-        <td class="text-right whitespace-nowrap">${d.qty.toLocaleString('id-ID')}</td>
-        <td class="text-right whitespace-nowrap">${kapasitasFmt}</td>
-        <td class="text-right whitespace-nowrap">${costFmt}</td>
-        <td class="text-right font-bold whitespace-nowrap text-${badgeColor}">${d.lcr.toFixed(1)}%</td>
-        <td class="text-right whitespace-nowrap ${d.skema.includes('Sewa') && d.kebocoran > 0 ? 'font-bold text-' + badgeColor : 'text-textMuted'}">
-          ${kebocoranFmt}
-        </td>
-        <td class="text-center"><span class="badge bg-${badgeColor}/20 text-${badgeColor} border-transparent whitespace-nowrap">${d.status}</span></td>
-      </tr>`;
+      const isDataTidakTersedia = d.status === 'Data ongkir belum tersedia';
+
+      let badgeColor;
+      if (isDataTidakTersedia) {
+        badgeColor = 'textMuted'; // abu-abu netral, BUKAN merah/danger (bukan "Bahaya")
+      } else if (d.status.includes('Optimal') || d.status.includes('Sehat')) {
+        badgeColor = 'success';
+      } else if (d.status.includes('Rawan') || d.status.includes('Under-utilized')) {
+        badgeColor = 'warning';
+      } else {
+        badgeColor = 'danger';
+      }
+
+      const badge = isDataTidakTersedia
+        ? `<span class="badge bg-slate-400/20 text-slate-400 border-transparent">${d.status}</span>`
+        : `<span class="badge bg-${badgeColor}/20 text-${badgeColor} border-transparent">${d.status}</span>`;
+
+      // --- PERBAIKAN: cost_per_unit & lcr bisa null, jangan panggil .toFixed()/Math.round() langsung ---
+      const costFmt = (d.cost_per_unit === null || d.cost_per_unit === undefined)
+        ? '-'
+        : `Rp ${Math.round(d.cost_per_unit).toLocaleString('id-ID')}`;
+
+      const lcrFmt = (d.lcr === null || d.lcr === undefined)
+        ? '-'
+        : `${d.lcr.toFixed(1)}%`;
+
+      const kebocoranFmt = (d.kebocoran && d.kebocoran > 0)
+        ? `Rp ${Math.round(d.kebocoran).toLocaleString('id-ID')}`
+        : '-';
+
+      const kapasitasFmt = (d.kapasitas && d.kapasitas !== '-')
+        ? Number(d.kapasitas).toLocaleString('id-ID')
+        : '-';
+
+      return `<tr class="hover:bg-bgMain/30 transition-colors ${isDataTidakTersedia ? 'opacity-60' : ''}">
+      <td class="font-medium text-textSub whitespace-nowrap">${d.wilayah}</td>
+      <td class="whitespace-nowrap">${d.kota}</td>
+      <td><span class="text-xs px-2 py-1 bg-surface border border-borderMain rounded text-textSub whitespace-nowrap">${d.skema}</span></td>
+      <td class="text-right whitespace-nowrap">${d.qty.toLocaleString('id-ID')}</td>
+      <td class="text-right whitespace-nowrap">${kapasitasFmt}</td>
+      <td class="text-right whitespace-nowrap">${costFmt}</td>
+      <td class="text-right font-bold whitespace-nowrap ${isDataTidakTersedia ? 'text-textMuted' : 'text-' + badgeColor}">${lcrFmt}</td>
+      <td class="text-right whitespace-nowrap ${d.skema.includes('Sewa') && d.kebocoran > 0 ? 'font-bold text-' + badgeColor : 'text-textMuted'}">
+        ${kebocoranFmt}
+      </td>
+      <td class="text-center">${badge}</td>
+    </tr>`;
     }).join('');
   }
 }

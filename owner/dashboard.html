@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="light" class="bg-bgMain text-textMain">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,39 +35,113 @@
     }
   </script>
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
     /* Per-tab active tab indicator */
-    .tab-btn { position: relative; padding-bottom: 0.75rem; }
-    .tab-btn::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; border-radius: 2px 2px 0 0; background: transparent; transition: background 0.2s; }
-    .tab-btn.active-blue  { color: #4A90D9; font-weight: 600; }
-    .tab-btn.active-blue::after  { background: #4A90D9; }
-    .tab-btn.active-teal  { color: #2BAE8E; font-weight: 600; }
-    .tab-btn.active-teal::after  { background: #2BAE8E; }
-    .tab-btn.active-orange { color: #F5821F; font-weight: 600; }
-    .tab-btn.active-orange::after { background: #F5821F; }
+    .tab-btn {
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .tab-btn.active-blue {
+      color: #4A90D9;
+      font-weight: 600;
+    }
+
+    .tab-btn.active-blue::after {
+      background: #4A90D9;
+    }
+
+    .tab-btn.active-teal {
+      color: #2BAE8E;
+      font-weight: 600;
+    }
+
+    .tab-btn.active-teal::after {
+      background: #2BAE8E;
+    }
+
+    .tab-btn.active-orange {
+      color: #F5821F;
+      font-weight: 600;
+    }
+
+    .tab-btn.active-orange::after {
+      background: #F5821F;
+    }
+
     /* Accent filter selects */
-    .sel-accent { color: white; border: none; border-radius: 9999px; padding: 0.35rem 1.8rem 0.35rem 0.9rem; font-size: 0.82rem; font-weight: 500; cursor: pointer; appearance: none; background-repeat: no-repeat; background-position: right 0.5rem center; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); outline: none; box-shadow: none; }\n    .sel-accent:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.35); }
-    .sel-accent option { color: #1E293B; background: white; }
+    .sel-accent {
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.35rem 1.8rem 0.35rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      appearance: none;
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      outline: none;
+      box-shadow: none;
+    }
+
+    \n .sel-accent:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+    }
+
+    .sel-accent option {
+      color: #1E293B;
+      background: white;
+    }
+
     /* Table header per tab */
-    .thead-teal th { background-color: #2BAE8E !important; color: white !important; }
-    .thead-orange th { background-color: #F5821F !important; color: white !important; }
+    .thead-teal th {
+      background-color: #2BAE8E !important;
+      color: white !important;
+    }
+
+    .thead-orange th {
+      background-color: #F5821F !important;
+      color: white !important;
+    }
   </style>
 </head>
+
 <body class="min-h-screen bg-bgMain relative" style="font-family:'Inter',sans-serif;">
 
   <!-- Header -->
   <header class="bg-surface border-b border-borderMain sticky top-0 z-30 shadow-sm">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div id="logoIconBox" class="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md shrink-0 transition-colors duration-200" style="background-color:#4A90D9;">
+        <div id="logoIconBox"
+          class="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md shrink-0 transition-colors duration-200"
+          style="background-color:#4A90D9;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="14" width="4.5" height="8" rx="1" fill="white"/>
-            <rect x="9.75" y="9" width="4.5" height="13" rx="1" fill="white"/>
-            <rect x="17.5" y="11.5" width="4" height="10.5" rx="1" fill="white"/>
-            <polyline points="4.25,12.5 12,6.5 19.5,9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="4.25" cy="12.5" r="2" fill="white"/>
-            <circle cx="12" cy="6.5" r="2" fill="white"/>
-            <circle cx="19.5" cy="9.5" r="2" fill="white"/>
+            <rect x="2" y="14" width="4.5" height="8" rx="1" fill="white" />
+            <rect x="9.75" y="9" width="4.5" height="13" rx="1" fill="white" />
+            <rect x="17.5" y="11.5" width="4" height="10.5" rx="1" fill="white" />
+            <polyline points="4.25,12.5 12,6.5 19.5,9.5" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <circle cx="4.25" cy="12.5" r="2" fill="white" />
+            <circle cx="12" cy="6.5" r="2" fill="white" />
+            <circle cx="19.5" cy="9.5" r="2" fill="white" />
           </svg>
         </div>
         <div>
@@ -87,15 +162,21 @@
   <div class="bg-surface border-b border-borderMain sticky top-[65px] sm:top-[73px] z-20">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6">
       <div class="flex gap-1 overflow-x-auto" id="tabContainer">
-        <button class="tab-btn active-blue flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all" data-tab="tab1" data-color="#4A90D9" data-cls="active-blue">
+        <button
+          class="tab-btn active-blue flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all"
+          data-tab="tab1" data-color="#4A90D9" data-cls="active-blue">
           <i data-lucide="bar-chart-3" class="w-4 h-4 shrink-0"></i>
           <span class="tab-label">Profitabilitas Regional</span>
         </button>
-        <button class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all" data-tab="tab2" data-color="#2BAE8E" data-cls="active-teal">
+        <button
+          class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all"
+          data-tab="tab2" data-color="#2BAE8E" data-cls="active-teal">
           <i data-lucide="package" class="w-4 h-4 shrink-0"></i>
           <span class="tab-label">Product-Region Fit</span>
         </button>
-        <button class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all" data-tab="tab3" data-color="#F5821F" data-cls="active-orange">
+        <button
+          class="tab-btn flex items-center gap-2 px-4 py-3 whitespace-nowrap text-sm text-textMuted transition-all"
+          data-tab="tab3" data-color="#F5821F" data-cls="active-orange">
           <i data-lucide="truck" class="w-4 h-4 shrink-0"></i>
           <span class="tab-label">Evaluasi Logistik</span>
         </button>
@@ -104,10 +185,10 @@
   </div>
 
   <main class="max-w-[1600px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
-    
+
     <!-- Tab 1 Content -->
     <div id="tab1" class="tab-content block space-y-5">
-      
+
       <div class="page-header">
         <div>
           <h2 class="text-xl sm:text-2xl font-bold text-textMain">Profitabilitas Regional</h2>
@@ -126,7 +207,8 @@
         <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">Total Revenue</h3>
-            <div class="p-2 bg-primary/10 rounded-lg"><i data-lucide="dollar-sign" class="w-4 h-4 text-primary"></i></div>
+            <div class="p-2 bg-primary/10 rounded-lg"><i data-lucide="dollar-sign" class="w-4 h-4 text-primary"></i>
+            </div>
           </div>
           <div id="kpiRevenue" class="text-2xl font-bold text-[#4A90D9]">Rp 450.5M</div>
           <p class="text-textMuted text-xs mt-2">Total Pendapatan</p>
@@ -135,10 +217,11 @@
         <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">TLC (Total Landed Cost)</h3>
-            <div class="p-2 bg-orange-500/10 rounded-lg"><i data-lucide="truck" class="w-4 h-4 text-orange-500"></i></div>
+            <div class="p-2 bg-orange-500/10 rounded-lg"><i data-lucide="truck" class="w-4 h-4 text-orange-500"></i>
+            </div>
           </div>
           <div id="kpiTLC" class="text-2xl font-bold text-orange-500">Rp 210.2M</div>
-          <p class="text-textMuted text-xs mt-2">Volume &times; TLC/unit (Jawa Rp15 &middot; Sumatera Rp30 &middot; Kalimantan Rp40)</p>
+          <p class="text-textMuted text-xs mt-2">Volume &times; estimasi biaya logistik per unit wilayah</p>
         </div>
         <!-- KPI 3 -->
         <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
@@ -153,7 +236,8 @@
         <div class="bg-surface border border-borderMain rounded-xl p-5 shadow-sm hover:shadow-md transition-all">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">Avg GPM (%)</h3>
-            <div class="p-2 bg-purple-500/10 rounded-lg"><i data-lucide="percent" class="w-4 h-4 text-purple-500"></i></div>
+            <div class="p-2 bg-purple-500/10 rounded-lg"><i data-lucide="percent" class="w-4 h-4 text-purple-500"></i>
+            </div>
           </div>
           <div id="kpiAvgGPM" class="text-2xl font-bold text-purple-500">32.4%</div>
           <p class="text-textMuted text-xs mt-2">Target: > 30%</p>
@@ -172,7 +256,8 @@
       <!-- Charts Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <div class="bg-surface border border-borderMain rounded-2xl p-4 sm:p-6 shadow-sm">
-          <h3 class="text-base sm:text-lg font-medium text-textMain mb-4">Revenue vs TLC vs Gross Profit per Wilayah</h3>
+          <h3 class="text-base sm:text-lg font-medium text-textMain mb-4">Revenue vs TLC vs Gross Profit per Wilayah
+          </h3>
           <div id="chartProfitRegion" class="chart-container"></div>
         </div>
         <div class="bg-surface border border-borderMain rounded-2xl p-4 sm:p-6 shadow-sm">
@@ -185,13 +270,17 @@
       <div class="mb-4">
         <h3 class="text-lg font-medium text-textMain mb-4 mt-8">GPM per Wilayah & Margin Gap</h3>
       </div>
-      
+
       <div id="detailCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <!-- Jawa -->
-        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+        <div
+          class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
           <div class="flex justify-between items-center mb-4">
             <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Jawa</p>
-            <div id="badgeJawa" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
+            <div id="badgeJawa"
+              class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat
+            </div>
           </div>
           <h4 id="gpmJawa" class="text-4xl font-bold text-[#4A90D9] mb-2">0.0%</h4>
           <div class="text-xs text-textMuted space-y-1">
@@ -200,10 +289,14 @@
           </div>
         </div>
         <!-- Kalimantan -->
-        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+        <div
+          class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
           <div class="flex justify-between items-center mb-4">
             <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Kalimantan</p>
-            <div id="badgeKalimantan" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
+            <div id="badgeKalimantan"
+              class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat
+            </div>
           </div>
           <h4 id="gpmKalimantan" class="text-4xl font-bold text-[#4A90D9] mb-2">0.0%</h4>
           <div class="text-xs text-textMuted space-y-1">
@@ -212,10 +305,14 @@
           </div>
         </div>
         <!-- Sumatera -->
-        <div class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+        <div
+          class="bg-surface/50 border border-borderMain rounded-2xl p-6 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
           <div class="flex justify-between items-center mb-4">
             <p class="text-textSub text-sm font-semibold tracking-wider uppercase">Sumatera</p>
-            <div id="badgeSumatera" class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat</div>
+            <div id="badgeSumatera"
+              class="px-3 py-1 bg-success/10 text-success text-xs rounded-full font-medium border border-success/20 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-success"></span>Sehat
+            </div>
           </div>
           <h4 id="gpmSumatera" class="text-4xl font-bold text-[#4A90D9] mb-2">0.0%</h4>
           <div class="text-xs text-textMuted space-y-1">
@@ -254,11 +351,16 @@
         <div class="bg-surface border border-borderMain rounded-2xl p-6 shadow-sm">
           <div class="mb-3">
             <h3 class="text-lg font-medium text-textMain">Ranking GPM per Produk</h3>
-            <p class="text-xs text-textSub mt-1">Diurutkan GPM tertinggi. Warna bar: 🟢 Sehat (&gt;30%) · 🟡 Waspada (15–30%) · 🔴 Bahaya (&lt;15%). Label = GPM% (Volume).</p>
+            <p class="text-xs text-textSub mt-1">Diurutkan GPM tertinggi. Warna bar: 🟢 Sehat (&gt;30%) · 🟡 Waspada
+              (15–30%) · 🔴 Bahaya (&lt;15%). Label = GPM% (Volume).</p>
             <div class="flex items-center gap-2 mt-2">
               <span class="text-xs text-textMuted">Filter:</span>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003; Wilayah</span>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003; Bulan</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003;
+                Wilayah</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003;
+                Bulan</span>
             </div>
             <p id="chartProductFitInfo" class="text-xs text-primary mt-1.5"></p>
           </div>
@@ -267,17 +369,22 @@
         <div class="bg-surface border border-borderMain rounded-2xl p-4 sm:p-6 shadow-sm">
           <div class="mb-3">
             <h3 class="text-lg font-medium text-textMain">GPM Produk per Wilayah</h3>
-            <p class="text-xs text-textSub mt-1">Perbandingan GPM antar wilayah per produk. Selalu tampilkan semua wilayah untuk melihat regional fit.</p>
+            <p class="text-xs text-textSub mt-1">Perbandingan GPM antar wilayah per produk. Selalu tampilkan semua
+              wilayah untuk melihat regional fit.</p>
             <div class="flex items-center gap-2 mt-2">
               <span class="text-xs text-textMuted">Filter:</span>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-borderMain text-textMuted">&#10007; Wilayah</span>
-              <span id="chartTopGPMBulanBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003; Semua Bulan</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-borderMain text-textMuted">&#10007;
+                Wilayah</span>
+              <span id="chartTopGPMBulanBadge"
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003;
+                Semua Bulan</span>
             </div>
           </div>
           <div id="chartTopGPM" class="chart-container"></div>
         </div>
       </div>
-      
+
       <div class="bg-surface border border-borderMain rounded-2xl shadow-sm overflow-hidden mt-6">
         <!-- Table Header -->
         <div class="px-6 py-4 border-b border-borderMain bg-surface/50 flex justify-between items-center">
@@ -288,8 +395,12 @@
             </h3>
             <div class="flex items-center gap-2 mt-2">
               <span class="text-xs text-textMuted">Filter:</span>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003; Wilayah</span>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003; Bulan</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003;
+                Wilayah</span>
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-success/15 text-success">&#10003;
+                Bulan</span>
             </div>
           </div>
         </div>
@@ -323,8 +434,9 @@
         </div>
         <div class="tab-filter-group">
           <span class="text-sm text-textSub whitespace-nowrap">Kapasitas:</span>
-          <input id="rangeKarungTab3" type="range" min="50000" max="400000" value="150000" step="10000" class="range range-primary range-sm w-28 sm:w-32" />
-          <span id="rangeKarungValueTab3" class="text-textMain font-medium font-mono text-sm">150.000</span>
+          <input id="rangeKarungTab3" type="range" min="100000" max="500000" value="100000" step="100000"
+            class="range range-primary range-sm w-28 sm:w-32" />
+          <span id="rangeKarungValueTab3" class="text-textMain font-medium font-mono text-sm">100.000</span>
           <div class="w-px h-5 bg-borderMain mx-1 hidden sm:block"></div>
           <span class="text-sm text-textSub whitespace-nowrap">Bulan:</span>
           <select id="filterBulanTab3" class="sel-accent" style="background-color:#F5821F;">
@@ -335,7 +447,8 @@
 
       <!-- KPI Cards -->
       <div class="kpi-grid-3">
-        <div class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
+        <div
+          class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">Kebocoran Margin Internal (YTD)</h3>
             <span class="px-2 py-0.5 bg-bgMain text-xs rounded border border-borderMain text-textSub">Sukabumi</span>
@@ -343,7 +456,8 @@
           <div id="kpiKebocoranInternal" class="text-2xl font-bold text-danger">Rp 0</div>
           <p class="text-textMuted text-xs mt-2">Akumulasi seluruh bulan · Tidak terpengaruh filter</p>
         </div>
-        <div class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
+        <div
+          class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">Rata-rata LCR COD Pelanggan</h3>
             <span class="px-2 py-0.5 bg-bgMain text-xs rounded border border-borderMain text-textSub">Eksternal</span>
@@ -351,7 +465,8 @@
           <div id="kpiLcrEksternal" class="text-2xl font-bold text-warning">0%</div>
           <p class="text-textMuted text-xs mt-2">Ongkir yang ditanggung pelanggan dari total transaksi</p>
         </div>
-        <div class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
+        <div
+          class="bg-surface border-l-4 border-[#F5821F] border-t border-r border-b border-borderMain rounded-xl p-5 shadow-sm">
           <div class="flex justify-between items-start mb-2">
             <h3 class="text-textSub text-sm font-medium">Rute COD Termahal</h3>
             <span class="px-2 py-0.5 bg-bgMain text-xs rounded border border-borderMain text-textSub">Eksternal</span>
@@ -381,7 +496,8 @@
           </h3>
           <p class="text-xs text-textSub mb-4">
             Top 10 Rute Volume Tertinggi vs LCR yang ditanggung pembeli.
-            <span class="block mt-1">Status LCR: 🟢 &le;15% (Sehat) &middot; 🟡 16-25% (Rawan) &middot; 🔴 &gt;25% (Bahaya)</span>
+            <span class="block mt-1">Status LCR: 🟢 &le;15% (Sehat) &middot; 🟡 16-25% (Rawan) &middot; 🔴 &gt;25%
+              (Bahaya)</span>
           </p>
           <div id="chartEksternalCOD" class="chart-container"></div>
         </div>
@@ -395,7 +511,8 @@
               <i data-lucide="table" class="w-5 h-5 text-success"></i>
               Matriks Evaluasi Logistik Keseluruhan
             </h3>
-            <p class="text-xs text-textSub mt-1">Menampilkan detail Skema Sewa Mobil (Owner) dan Skema COD (Pelanggan) berdasarkan rute.</p>
+            <p class="text-xs text-textSub mt-1">Menampilkan detail Skema Sewa Mobil (Owner) dan Skema COD (Pelanggan)
+              berdasarkan rute.</p>
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -437,7 +554,7 @@
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const color = btn.dataset.color;
-        const cls   = btn.dataset.cls;
+        const cls = btn.dataset.cls;
 
         // Remove all active classes
         document.querySelectorAll('.tab-btn').forEach(b => {
@@ -459,4 +576,5 @@
     });
   </script>
 </body>
+
 </html>

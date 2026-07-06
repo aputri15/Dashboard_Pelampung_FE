@@ -25,6 +25,7 @@
             textMuted: '#94A3B8',
             primary: '#F5821F',
             success: '#22C55E',
+            warning: '#F59E0B',
             danger: '#EF4444',
           },
           fontFamily: { sans: ['Inter', 'sans-serif'] }
@@ -189,6 +190,16 @@
       '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Desember'
     };
 
+    function renderReuploadBadge(log) {
+      if (log.reupload_used_at) {
+        return '<div class="mt-1 inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface text-textSub text-xs border border-borderMain"><i data-lucide="check" class="w-3.5 h-3.5"></i> Izin sudah dipakai</div>';
+      }
+      if (log.reupload_allowed) {
+        return '<div class="mt-1 inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-warning/10 text-warning text-xs border border-warning/20"><i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Upload ulang diizinkan</div>';
+      }
+      return '';
+    }
+
     async function loadLogFilterOptions() {
       const res = await apiFetch('/transaksi/log/upload-filter-options');
       if (!res || !res.ok) return;
@@ -263,16 +274,24 @@
             <td class="px-6 py-4 text-textSub">${l.tanggal}</td>
             <td class="px-6 py-4 font-mono text-xs text-primary">${l.nama_file}</td>
             <td class="px-6 py-4 text-center font-medium">${l.jumlah_baris}</td>
-            <td class="px-6 py-4 text-center">${statusBadge}</td>
+            <td class="px-6 py-4 text-center">${statusBadge}${renderReuploadBadge(l)}</td>
             <td class="px-6 py-4 text-textSub">
               <span class="inline-flex items-center gap-1.5 px-2 py-1 bg-surface rounded text-xs border border-borderMain">
                 <i data-lucide="user" class="w-3 h-3"></i> ${l.uploaded_by}
               </span>
             </td>
             <td class="px-6 py-4 text-center">
-              <button onclick="deleteLog(${l.id})" class="btn btn-xs btn-ghost text-danger hover:bg-danger/10 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex items-center justify-center gap-2">
+              ${l.can_allow_reupload ? `
+                <button onclick="allowReupload(${l.id}, '${String(l.nama_file).replace(/'/g, "\\\'")}')" class="btn btn-xs border border-warning/30 bg-warning/10 text-warning hover:bg-warning/20 transition-colors whitespace-nowrap" title="Izinkan Upload Ulang">
+                  <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                  <span>Izinkan Upload Ulang</span>
+                </button>
+              ` : ''}
+              <button onclick="deleteLog(${l.id})" class="btn btn-xs btn-ghost text-danger hover:bg-danger/10 transition-opacity" title="Hapus Log">
                 <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
+              </div>
             </td>
           </tr>
         `;
@@ -288,6 +307,24 @@
       document.getElementById('filterLogStatus').value = '';
       currentLogPage = 1;
       loadLogs();
+    }
+
+    async function allowReupload(id, namaFile) {
+      const confirmed = confirm(
+        `Izinkan upload ulang untuk file "${namaFile}"?\n\n` +
+        'Aksi ini tidak menghapus log lama dan tidak menghapus data transaksi. ' +
+        'Aksi ini hanya mengizinkan file yang sama di-upload satu kali lagi.'
+      );
+      if (!confirmed) return;
+
+      const res = await apiFetch(`/transaksi/log/uploads/${id}/allow-reupload`, { method: 'POST' });
+      if (res && res.ok) {
+        loadLogs();
+        return;
+      }
+
+      const err = await res?.json();
+      alert(err?.detail || 'Gagal mengizinkan upload ulang.');
     }
 
     async function deleteLog(id) {
